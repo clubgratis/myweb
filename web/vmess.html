@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Buat Akun VMess</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <div class="bg-blue-600 text-white text-center py-4 text-xl font-semibold">
+    ✅ VMess Created
+  </div>
+
+  <!-- Form Input -->
+  <div class="max-w-md mx-auto mt-6 p-4 bg-white rounded shadow space-y-4">
+    <input id="ipPort" type="text" placeholder="Masukkan IP:Port (contoh: 104.26.14.14:443)" class="w-full border p-2 rounded" />
+    <input id="domain" type="text" placeholder="Domain (contoh: bug.cloudflare.com)" class="w-full border p-2 rounded" />
+    <input id="bug" type="text" placeholder="Bug Wildcard (contoh: cdn.cloudflare.net)" class="w-full border p-2 rounded" />
+    <button onclick="generateVMess()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+      🔧 Buat Akun
+    </button>
+  </div>
+
+  <!-- Hasil -->
+  <div id="result" class="max-w-md mx-auto mt-4 p-4 bg-white rounded shadow hidden space-y-3 text-sm">
+    <div>🌐 Remark: <span id="remarks" class="font-semibold"></span></div>
+    <div>📡 Domain: <span id="res-domain"></span></div>
+    <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
+    <div>🆔 UUID: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
+    <div>🚪 Port: <span id="res-port"></span></div>
+    <div>🔐 TLS: TLS</div>
+    <div>📁 Path: <span id="path"></span></div>
+    <div>🔗 Link:
+      <textarea readonly id="vmess-link" class="w-full mt-1 p-2 bg-gray-100 rounded text-xs"></textarea>
+    </div>
+    <div class="text-center">
+      <img id="qrcode" src="" alt="QR Code" class="mx-auto my-2 rounded shadow" />
+      <button onclick="copyConfig()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        📋 Salin Konfigurasi
+      </button>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    async function generateVMess() {
+      const ipPort = document.getElementById('ipPort').value.trim();
+      const domain = document.getElementById('domain').value.trim();
+      const bug = document.getElementById('bug').value.trim();
+      const resultBox = document.getElementById('result');
+
+      if (!ipPort || !domain || !bug || !ipPort.includes(':')) {
+        alert('Isi semua field dengan benar.');
+        return;
+      }
+
+      const [ip, port] = ipPort.split(':');
+
+      const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
+      const path = `/Club-Gratis/${ip}-${port}`;
+      const url = `https://api.ndeso.xyz/check?ip=${ip}:${port}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!data.active) {
+          alert('Proxy tidak aktif!');
+          return;
+        }
+
+        const remarks = `${data.country} ${data.flag} [${data.isp}]`;
+        const linkObject = {
+          v: "2",
+          ps: remarks,
+          add: bug,
+          port: "443",
+          id: uuid,
+          aid: "0",
+          net: "ws",
+          type: "none",
+          host: domain,
+          path: path,
+          tls: "tls"
+        };
+        const vmessLink = "vmess://" + btoa(JSON.stringify(linkObject));
+
+        // Tampilkan hasil
+        document.getElementById('remarks').textContent = remarks;
+        document.getElementById('res-domain').textContent = domain;
+        document.getElementById('res-bug').textContent = bug;
+        document.getElementById('res-port').textContent = port;
+        document.getElementById('path').textContent = path;
+        document.getElementById('vmess-link').value = vmessLink;
+        document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessLink)}`;
+        resultBox.classList.remove('hidden');
+
+      } catch (err) {
+        alert('Gagal mengambil data proxy.');
+        console.error(err);
+      }
+    }
+
+    function copyConfig() {
+      const link = document.getElementById('vmess-link');
+      link.select();
+      document.execCommand('copy');
+      alert('Konfigurasi berhasil disalin!');
+    }
+  </script>
+</body>
+</html>
