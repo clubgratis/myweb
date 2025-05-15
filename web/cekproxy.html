@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cek Proxy Lengkap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <div class="bg-blue-600 text-white text-center py-4 text-xl font-semibold">
+    ✅ CEK STATUS PROXY LENGKAP
+  </div>
+
+  <!-- Form -->
+  <div class="max-w-xl mx-auto mt-6 p-4 bg-white rounded shadow space-y-4">
+    <input id="ipPort" type="text" placeholder="Masukkan IP:Port (contoh: 104.26.14.14:443)" class="w-full border p-2 rounded" />
+    <button onclick="cekProxy()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+      🔍 Cek Sekarang
+    </button>
+  </div>
+
+  <!-- Hasil -->
+  <div id="hasil" class="max-w-xl mx-auto mt-4 p-4 bg-white rounded shadow hidden space-y-2 text-sm">
+    <div>🟢 <strong>Status:</strong> <span id="status"></span></div>
+    <div>🌐 <strong>IP:</strong> <span id="ip"></span></div>
+    <div>📡 <strong>Port:</strong> <span id="port"></span></div>
+    <div>🌍 <strong>Negara:</strong> <span id="country"></span> <span id="flag"></span></div>
+    <div>🏙️ <strong>Kota:</strong> <span id="city"></span></div>
+    <div>🏢 <strong>ISP:</strong> <span id="isp"></span></div>
+    <div>📶 <strong>ASN:</strong> <span id="asn"></span></div>
+    <div>🏛️ <strong>Organization:</strong> <span id="org"></span></div>
+    <div>📍 <strong>Lokasi:</strong> <span id="lat"></span>, <span id="lon"></span></div>
+    <div>🗺️ <strong>Maps:</strong> <a id="maps" href="#" target="_blank" class="text-blue-600 underline">Lihat Lokasi</a></div>
+    <div>⚡ <strong>Latensi:</strong> <span id="latency"></span> ms</div>
+    <div>🕓 <strong>Timezone:</strong> <span id="timezone"></span></div>
+    <div>🛠️ <strong>Port Terbuka:</strong> <span id="open_ports"></span></div>
+    <div>📡 <strong>Protocols:</strong> <span id="protocols"></span></div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    async function cekProxy() {
+      const input = document.getElementById('ipPort').value.trim();
+      const hasil = document.getElementById('hasil');
+      if (!input || !input.includes(':')) {
+        alert('Masukkan IP dan Port dengan format benar.');
+        return;
+      }
+
+      const [ip, port] = input.split(':');
+      const url = `https://api.ndeso.xyz/check?ip=${ip}:${port}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        // Tampilkan data lengkap
+        document.getElementById('status').textContent = data.active ? 'Aktif' : 'Mati';
+        document.getElementById('status').className = data.active ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
+        document.getElementById('ip').textContent = ip;
+        document.getElementById('port').textContent = port;
+        document.getElementById('country').textContent = data.country || '-';
+        document.getElementById('flag').textContent = data.flag || '';
+        document.getElementById('city').textContent = data.city || '-';
+        document.getElementById('isp').textContent = data.isp || '-';
+        document.getElementById('asn').textContent = data.asn || '-';
+        document.getElementById('org').textContent = data.org || '-';
+        document.getElementById('lat').textContent = data.lat || '-';
+        document.getElementById('lon').textContent = data.lon || '-';
+        document.getElementById('maps').href = `https://www.google.com/maps?q=${data.lat},${data.lon}`;
+        document.getElementById('latency').textContent = data.latency || '-';
+        document.getElementById('timezone').textContent = data.timezone || '-';
+        document.getElementById('open_ports').textContent = (data.open_ports || []).join(', ') || '-';
+        document.getElementById('protocols').textContent = (data.protocols || []).join(', ') || '-';
+
+        hasil.classList.remove('hidden');
+      } catch (err) {
+        alert('Gagal mengambil data dari API.');
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
