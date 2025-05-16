@@ -56,19 +56,21 @@
       }
 
       const [ip, port] = ipPort.split(':');
-      const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
-      const path = `/Club-Gratis/${ip}-${port}`;
 
       try {
-        const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
+        const checkURL = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
+        const res = await fetch(checkURL);
         const data = await res.json();
 
-        if (!data.message || !data.message.includes('ACTIVE')) {
+        if (!data.active) {
           alert('Proxy tidak aktif!');
           return;
         }
 
+        const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
+        const path = `/Club-Gratis/${ip}-${port}`;
         const remarks = `${data.country} ${data.flag} [${data.isp}]`;
+
         const linkObject = {
           v: "2",
           ps: remarks,
@@ -96,7 +98,7 @@
 
       } catch (err) {
         alert('Gagal mengambil data proxy.');
-        console.error('Error:', err);
+        console.error(err);
       }
     }
 
