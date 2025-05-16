@@ -59,7 +59,7 @@
         // Tampilkan data lengkap
         document.getElementById('status').textContent = data.active ? 'Aktif' : 'Mati';
         document.getElementById('status').className = data.active ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
-        document.getElementById('proxyip').textContent = ${data.proxyip ? '✅ Yes' : '❌ No'};
+        document.getElementById('proxyip').textContent = data.proxyip ? '✅ Yes' : '❌ No';
         document.getElementById('ip').textContent = ip;
         document.getElementById('port').textContent = port;
         document.getElementById('country').textContent = data.country || '-';
