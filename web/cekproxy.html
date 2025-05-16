@@ -49,7 +49,7 @@
       }
 
       const [ip, port] = input.split(':');
-      const url = `https://api.ndeso.xyz/check?ip=${ipport}`;
+      const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
 
       try {
         const res = await fetch(url);
