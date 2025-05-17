@@ -107,11 +107,13 @@
     }
 
     function copyConfig() {
-      const link = document.getElementById('vmess-link');
-      link.select();
-      document.execCommand('copy');
-      alert('Konfigurasi berhasil disalin!');
-    }
+  const link = document.getElementById('vmess-link');
+  link.select();
+  link.setSelectionRange(0, 99999); // untuk dukungan mobile
+  document.execCommand('copy');
+  alert('Konfigurasi berhasil disalin!');
+}
+
   </script>
 </body>
 </html>
