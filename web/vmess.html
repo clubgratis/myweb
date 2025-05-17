@@ -62,7 +62,7 @@
         const res = await fetch(checkURL);
         const data = await res.json();
 
-        if (!data.status) {
+        if (!data.message?.includes('ACTIVE') ? "✅ ACTIVE" : "❌ DEAD") {
           alert('Proxy tidak aktif!');
           return;
         }
