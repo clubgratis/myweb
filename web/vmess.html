@@ -87,7 +87,7 @@
           tls: "tls",
           scy: "zero"
         };
-        const link = `vmess://${uuid}@${bug}:443?type=ws&encryption=none&security=tls&host=${bug}.${domain}&path=${path}#${encodeURIComponent(remarks)}`;
+        const vmessLink = "vmess://" + btoa(JSON.stringify(linkObject));
 
         // Tampilkan hasil
         document.getElementById('remarks').textContent = remarks;
