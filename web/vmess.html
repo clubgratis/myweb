@@ -62,7 +62,7 @@
         const res = await fetch(checkURL);
         const data = await res.json();
 
-        if (!data.active || !data.message.includes('ACTIVE')) {
+        if (!data.active || !data.message.includes('ACTIVE ✅')) {
           alert('Proxy tidak aktif!');
           return;
         }
