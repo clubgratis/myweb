@@ -24,14 +24,12 @@
 
   <!-- Hasil -->
   <div id="result" class="max-w-md mx-auto mt-4 p-4 bg-white rounded shadow hidden space-y-3 text-sm">
-    <div>🌐 Remark: <span id="remarks" class="font-semibold" style="color:blue;"></span></div>
-    <div>🟢 Ping: <span id="ping" class="font-semibold" style="color:green;"></span></div>
+    <div>🌐 Remark: <span id="remarks" class="font-semibold"></span></div>
     <div>📡 Domain: <span id="res-domain"></span></div>
     <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
     <div>🔑 Password: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
-    <div>🚪 Port: <span id="res-port"></span></div>
-    <div>🔐 TLS: TLS</div>
-    <div>📁 Path: <span id="path"></span></div>
+    <div>🛡️ Method: <span id="none"></span></div>
+    <div>📁 Security: <span id="tls"></span></div>
     <div>🔗 Link:
       <textarea readonly id="ss-link" class="w-full mt-1 p-2 bg-gray-100 rounded text-xs"></textarea>
     </div>
@@ -58,21 +56,23 @@
 
       const [ip, port] = ipPort.split(':');
       const password = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
-      const path = `/Club-Gratis/${ip}-${port}`;
-      const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
+      const path = `${ip}-${port}`;
+      const method = 'none';
+      const url = `https://api.ndeso.xyz/check?ip=${ip}:${port}`;
 
       try {
         const res = await fetch(url);
         const data = await res.json();
 
-        if (!data.message || !data.message.includes('ACTIVE')) {
+        if (!data.active) {
           alert('Proxy tidak aktif!');
           return;
         }
 
         const remarks = `${data.country} ${data.flag} [${data.isp}]`;
-        const ping = `${data.delay}`;
-        const link = `ss://${password}@${bug}:443?security=tls&type=ws&host=${bug}.${domain}&path=${path}#${encodeURIComponent(remarks)}`;
+        const security = `tls` ? 443 : 80;
+        const userInfo = btoa(`${method}:${password}`);
+        const link = `ss://${userInfo}@${bug}:443?encryption=none$&type=ws&host=${bug}.${domain}&path=${path}&security=${security}&sni=${bug}.${domain}#${remarks}`;
 
         // Tampilkan hasil
         document.getElementById('remarks').textContent = remarks;
