@@ -2,40 +2,42 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Buat Akun Shadowsocks</title>
+  <title>Buat Akun Shadowsock</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
   <!-- Header -->
   <div class="bg-blue-600 text-white text-center py-4 text-xl font-semibold">
-    ✅ SHADOWSOCKS Created
+    ✅ SHADOWSOCK Created
   </div>
 
-  <!-- Form -->
+  <!-- Form Input -->
   <div class="max-w-md mx-auto mt-6 p-4 bg-white rounded shadow space-y-4">
     <input id="ipPort" type="text" placeholder="Masukkan IP:Port (contoh: 104.26.14.14:443)" class="w-full border p-2 rounded" />
     <input id="domain" type="text" placeholder="Domain (contoh: bug.cloudflare.com)" class="w-full border p-2 rounded" />
     <input id="bug" type="text" placeholder="Bug Wildcard (contoh: cdn.cloudflare.net)" class="w-full border p-2 rounded" />
-    <button onclick="generateSS()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+    <button onclick="generateTrojan()" class="w-full bg-pink-600 text-white p-2 rounded hover:bg-pink-700">
       🔧 Buat Akun
     </button>
   </div>
 
   <!-- Hasil -->
   <div id="result" class="max-w-md mx-auto mt-4 p-4 bg-white rounded shadow hidden space-y-3 text-sm">
-    <div>🌐 Remark: <span id="remarks" class="font-semibold"></span></div>
+    <div>🌐 Remark: <span id="remarks" class="font-semibold" style="color:blue;"></span></div>
+    <div>🟢 Ping: <span id="ping" class="font-semibold" style="color:green;"></span></div>
     <div>📡 Domain: <span id="res-domain"></span></div>
     <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
     <div>🔑 Password: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
-    <div>🛡️ Method: aes-128-gcm</div>
-    <div>📁 Plugin: xray-plugin;path=/Club-Gratis/<span id="res-path"></span>;host=<span id="res-domain2"></span>;tls</div>
+    <div>🚪 Port: <span id="res-port"></span></div>
+    <div>🔐 TLS: TLS</div>
+    <div>📁 Path: <span id="path"></span></div>
     <div>🔗 Link:
       <textarea readonly id="ss-link" class="w-full mt-1 p-2 bg-gray-100 rounded text-xs"></textarea>
     </div>
     <div class="text-center">
       <img id="qrcode" src="" alt="QR Code" class="mx-auto my-2 rounded shadow" />
-      <button onclick="copyConfig()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      <button onclick="copyConfig()" class="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">
         📋 Salin Konfigurasi
       </button>
     </div>
@@ -43,7 +45,7 @@
 
   <!-- Script -->
   <script>
-    async function generateSS() {
+    async function generateTrojan() {
       const ipPort = document.getElementById('ipPort').value.trim();
       const domain = document.getElementById('domain').value.trim();
       const bug = document.getElementById('bug').value.trim();
@@ -56,30 +58,29 @@
 
       const [ip, port] = ipPort.split(':');
       const password = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
-      const path = `${ip}-${port}`;
-      const method = 'aes-128-gcm';
-      const url = `https://api.ndeso.xyz/check?ip=${ip}:${port}`;
+      const path = `/Club-Gratis/${ip}-${port}`;
+      const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
 
       try {
         const res = await fetch(url);
         const data = await res.json();
 
-        if (!data.active) {
+        if (!data.message || !data.message.includes('ACTIVE')) {
           alert('Proxy tidak aktif!');
           return;
         }
 
         const remarks = `${data.country} ${data.flag} [${data.isp}]`;
-        const plugin = `xray-plugin;path=/Club-Gratis/${path};host=${domain};tls`;
-        const userInfo = btoa(`${method}:${password}`);
-        const link = `ss://${userInfo}@${bug}:443?plugin=${encodeURIComponent(plugin)}#${encodeURIComponent(remarks)}`;
+        const ping = `${data.delay}`;
+        const link = `ss://${password}@${bug}:443?security=tls&type=ws&host=${bug}.${domain}&path=${path}#${encodeURIComponent(remarks)}`;
 
         // Tampilkan hasil
         document.getElementById('remarks').textContent = remarks;
+        document.getElementById('ping').textContent = ping;
         document.getElementById('res-domain').textContent = domain;
-        document.getElementById('res-domain2').textContent = domain;
         document.getElementById('res-bug').textContent = bug;
-        document.getElementById('res-path').textContent = path;
+        document.getElementById('res-port').textContent = port;
+        document.getElementById('path').textContent = path;
         document.getElementById('ss-link').value = link;
         document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link)}`;
         resultBox.classList.remove('hidden');
