@@ -68,10 +68,10 @@
         document.getElementById('isp').textContent = data.isp || '-';
         document.getElementById('asn').textContent = data.asn || '-';
         document.getElementById('org').textContent = data.org || '-';
-        document.getElementById('lat').textContent = data.lat || '-';
-        document.getElementById('lon').textContent = data.lon || '-';
-        document.getElementById('maps').href = `https://www.google.com/maps?q=${data.lat},${data.lon}`;
-        document.getElementById('latency').textContent = data.latency || '-';
+        document.getElementById('lat').textContent = data.latitude || '-';
+        document.getElementById('lon').textContent = data.longitude || '-';
+        document.getElementById('maps').href = `https://www.google.com/maps?q=${data.latitude},${data.longitude}`;
+        document.getElementById('latency').textContent = data.delay || '-';
         document.getElementById('timezone').textContent = data.timezone || '-';
         document.getElementById('open_ports').textContent = (data.open_ports || []).join(', ') || '-';
         document.getElementById('protocols').textContent = (data.protocols || []).join(', ') || '-';
