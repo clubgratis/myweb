@@ -71,8 +71,8 @@
 
         const remarks = `${data.country} ${data.flag} [${data.isp}]`;
         const plugin = `path=/Club-Gratis/${path}`;
-        const userInfo = btoa(`${method}:${password}`);
-        const link = `ss://${userInfo}@${bug}:443?plugin=${encodeURIComponent(plugin)}#${encodeURIComponent(remarks)}`;
+        const userInfo = btoa(`${password}`);
+        const link = `ss://${userinfo}@${bug}:443?plugin=${encodeURIComponent(plugin)}#${encodeURIComponent(remarks)}`;
 
         // Tampilkan hasil
         document.getElementById('remarks').textContent = remarks;
