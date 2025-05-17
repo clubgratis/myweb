@@ -28,8 +28,8 @@
     <div>📡 Domain: <span id="res-domain"></span></div>
     <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
     <div>🔑 Password: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
-    <div>🛡️ Method: aes-128-gcm</div>
-    <div>📁 Plugin: xray-plugin;path=/Club-Gratis/<span id="res-path"></span>;host=<span id="res-domain2"></span>;tls</div>
+    <div>🛡️ Method: none</div>
+    <div>📁 Plugin: ws;path=/Club-Gratis/<span id="res-path"></span>;host=<span id="res-domain2"></span>;tls</div>
     <div>🔗 Link:
       <textarea readonly id="ss-link" class="w-full mt-1 p-2 bg-gray-100 rounded text-xs"></textarea>
     </div>
@@ -57,7 +57,7 @@
       const [ip, port] = ipPort.split(':');
       const password = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
       const path = `${ip}-${port}`;
-      const method = 'aes-128-gcm';
+      const method = 'none';
       const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
 
       try {
@@ -70,7 +70,7 @@
         }
 
         const remarks = `${data.country} ${data.flag} [${data.isp}]`;
-        const plugin = `xray-plugin;path=/Club-Gratis/${path};host=${domain};tls`;
+        const plugin = `ws;path=/Club-Gratis/${path};host=${domain};tls`;
         const userInfo = btoa(`${method}:${password}`);
         const link = `ss://${userInfo}@${bug}:443?plugin=${encodeURIComponent(plugin)}#${encodeURIComponent(remarks)}`;
 
