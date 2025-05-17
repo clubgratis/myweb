@@ -62,7 +62,7 @@
         const res = await fetch(checkURL);
         const data = await res.json();
 
-        if (!data.active?.includes('ACTIVE') {
+        if (!data.active || !data.message.includes('ACTIVE')) {
           alert('Proxy tidak aktif!');
           return;
         }
@@ -76,14 +76,17 @@
           ps: remarks,
           add: bug,
           port: "443",
-          id: uuid,
+          id: UUID,
           aid: "0",
           net: "ws",
           type: "none",
           host: domain,
           path: path,
-          tls: "tls"
-        };
+          tls: "tls",
+          sni: domain,
+          alpn: "",
+          scy: "zero"
+         };
         const vmessLink = "vmess://" + btoa(JSON.stringify(linkObject));
 
         // Tampilkan hasil
