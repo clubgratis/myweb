@@ -2,14 +2,14 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Buat Akun VMess</title>
+  <title>Buat Akun VMESS</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
   <!-- Header -->
   <div class="bg-blue-600 text-white text-center py-4 text-xl font-semibold">
-    ✅ VMess Created
+    ✅ VMESS Created
   </div>
 
   <!-- Form Input -->
@@ -17,14 +17,15 @@
     <input id="ipPort" type="text" placeholder="Masukkan IP:Port (contoh: 104.26.14.14:443)" class="w-full border p-2 rounded" />
     <input id="domain" type="text" placeholder="Domain (contoh: bug.cloudflare.com)" class="w-full border p-2 rounded" />
     <input id="bug" type="text" placeholder="Bug Wildcard (contoh: cdn.cloudflare.net)" class="w-full border p-2 rounded" />
-    <button onclick="generateVMess()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+    <button onclick="generateVMESS()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-black-700">
       🔧 Buat Akun
     </button>
   </div>
 
   <!-- Hasil -->
   <div id="result" class="max-w-md mx-auto mt-4 p-4 bg-white rounded shadow hidden space-y-3 text-sm">
-    <div>🌐 Remark: <span id="remarks" class="font-semibold"></span></div>
+    <div>🌐 Remark: <span id="remarks" class="font-semibold" style="color:blue;"></span></div>
+    <div>🟢 Ping: <span id="ping" class="font-semibold" style="color:green;"></span></div>
     <div>📡 Domain: <span id="res-domain"></span></div>
     <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
     <div>🆔 UUID: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
@@ -36,7 +37,7 @@
     </div>
     <div class="text-center">
       <img id="qrcode" src="" alt="QR Code" class="mx-auto my-2 rounded shadow" />
-      <button onclick="copyConfig()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      <button onclick="copyConfig()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-black-700">
         📋 Salin Konfigurasi
       </button>
     </div>
@@ -44,7 +45,7 @@
 
   <!-- Script -->
   <script>
-    async function generateVMess() {
+    async function generateVMESS() {
       const ipPort = document.getElementById('ipPort').value.trim();
       const domain = document.getElementById('domain').value.trim();
       const bug = document.getElementById('bug').value.trim();
@@ -57,46 +58,46 @@
 
       const [ip, port] = ipPort.split(':');
 
+      const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
+      const path = `/Club-Gratis/${ip}-${port}`;
+      const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
+
       try {
-        const checkURL = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
-        const res = await fetch(checkURL);
+        const res = await fetch(url);
         const data = await res.json();
 
-        if (!data.message) {
-          alert('Status tidak aktif!');
+        if (!data.message || !data.message.includes('ACTIVE')) {
+          alert('Proxy tidak aktif!');
           return;
         }
 
-        const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
-        const path = `/Club-Gratis/${ip}-${port}`;
         const remarks = `${data.country} ${data.flag} [${data.isp}]`;
-
+        const ping = `${data.delay}`;
         const linkObject = {
           v: "2",
           ps: remarks,
           add: bug,
           port: "443",
-          id: UUID,
+          id: uuid,
           aid: "0",
           net: "ws",
           type: "none",
           host: domain,
           path: path,
           tls: "tls",
-          sni: domain,
-          alpn: "",
           scy: "zero"
-         };
-        const vmessLink = "vmess://" + btoa(JSON.stringify(linkObject));
+        };
+        const link = `vmess://${uuid}@${bug}:443?type=ws&encryption=none&security=tls&host=${bug}.${domain}&path=${path}#${encodeURIComponent(remarks)}`;
 
         // Tampilkan hasil
         document.getElementById('remarks').textContent = remarks;
+        document.getElementById('ping').textContent = ping;
         document.getElementById('res-domain').textContent = domain;
         document.getElementById('res-bug').textContent = bug;
         document.getElementById('res-port').textContent = port;
         document.getElementById('path').textContent = path;
-        document.getElementById('vmess-link').value = vmessLink;
-        document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessLink)}`;
+        document.getElementById('vmess-link').value = link;
+        document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link)}`;
         resultBox.classList.remove('hidden');
 
       } catch (err) {
