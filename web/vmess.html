@@ -45,63 +45,63 @@
   <!-- Script -->
   <script>
     async function generateVMess() {
-      const ipPort = document.getElementById('ipPort').value.trim();
-      const domain = document.getElementById('domain').value.trim();
-      const bug = document.getElementById('bug').value.trim();
-      const resultBox = document.getElementById('result');
+  const ipPort = document.getElementById('ipPort').value.trim();
+  const domain = document.getElementById('domain').value.trim();
+  const bug = document.getElementById('bug').value.trim();
+  const resultBox = document.getElementById('result');
 
-      if (!ipPort || !domain || !bug || !ipPort.includes(':')) {
-        alert('Isi semua field dengan benar.');
-        return;
-      }
+  if (!ipPort || !domain || !bug || !ipPort.includes(':')) {
+    alert('Isi semua field dengan benar.');
+    return;
+  }
 
-      const [ip, port] = ipPort.split(':');
-      const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
-      const path = `/Club-Gratis/${ip}-${port}`;
+  const [ip, port] = ipPort.split(':');
+  const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
+  const path = `/Club-Gratis/${ip}-${port}`;
 
-      try {
-        const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
-        const data = await res.json();
+  try {
+    const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
+    const data = await res.json();
+    console.log("Response dari API:", data);
 
-        if (!data.message || !data.message.trim().includes('ACTIVE')) {
-          alert('Proxy tidak aktif!');
-          return;
-        }
+    if (!data.message || !data.message.includes('ACTIVE')) {
+      alert('Proxy tidak aktif!');
+      return;
+    }
 
-        const remarks = `${data.country} ${data.flag} [${data.isp}]`;
+    const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
 
-        const linkObject = {
-          v: "2",
-          ps: remarks,
-          add: bug,
-          port: "443",
-          id: uuid,
-          aid: "0",
-          net: "ws",
-          type: "none",
-          host: domain,
-          path: path,
-          tls: "tls",
-          scy: "zero"
-        };
+    const linkObject = {
+      v: "2",
+      ps: remarks,
+      add: bug,
+      port: "443",
+      id: uuid,
+      aid: "0",
+      net: "ws",
+      type: "none",
+      host: domain,
+      path: path,
+      tls: "tls",
+      scy: "zero"
+    };
 
-        const vmessLink = "vmess://" + btoa(JSON.stringify(linkObject));
+    const vmessLink = "vmess://" + btoa(JSON.stringify(linkObject));
 
-        document.getElementById('remarks').textContent = remarks;
-        document.getElementById('res-domain').textContent = domain;
-        document.getElementById('res-bug').textContent = bug;
-        document.getElementById('res-port').textContent = port;
-        document.getElementById('path').textContent = path;
-        document.getElementById('vmess-link').value = vmessLink;
-        document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessLink)}`;
-        resultBox.classList.remove('hidden');
+    document.getElementById('remarks').textContent = remarks;
+    document.getElementById('res-domain').textContent = domain;
+    document.getElementById('res-bug').textContent = bug;
+    document.getElementById('res-port').textContent = port;
+    document.getElementById('path').textContent = path;
+    document.getElementById('vmess-link').value = vmessLink;
+    document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessLink)}`;
+    resultBox.classList.remove('hidden');
 
-      } catch (err) {
-        alert('Gagal mengambil data proxy.');
-        console.error('Error:', err);
-      }
-    }
-
+  } catch (err) {
+    alert('Gagal mengambil data proxy.');
+    console.error('Error:', err);
+  }
+}
     function copyConfig() {
       const link = document.getElementById('vmess-link');
       link.select();
