@@ -25,7 +25,7 @@
   <!-- Hasil -->
   <div id="result" class="max-w-md mx-auto mt-4 p-4 bg-white rounded shadow hidden space-y-3 text-sm">
     <div>🌐 Remark: <span id="remarks" class="font-semibold"></span></div>
-    <div>📡 Domain: <span id="res-domain"></span></div>
+    <div>📡 Domain: <span id="res-bug"."res-domain"></span></div>
     <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
     <div>🆔 UUID: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
     <div>🚪 Port: <span id="res-port"></span></div>
@@ -71,11 +71,11 @@
         }
 
         const remarks = `${data.country} ${data.flag} [${data.isp}]`;
-        const link = `vless://${uuid}@${bug}:443?type=ws&encryption=none&security=tls&host=${domain}&path=${path}#${encodeURIComponent(remarks)}`;
+        const link = `vless://${uuid}@${bug}:443?type=ws&encryption=none&security=tls&host=${bug}.${domain}&path=${path}#${encodeURIComponent(remarks)}`;
 
         // Tampilkan hasil
         document.getElementById('remarks').textContent = remarks;
-        document.getElementById('res-domain').textContent = domain;
+        document.getElementById('res-bug').('res-domain').textContent = domain;
         document.getElementById('res-bug').textContent = bug;
         document.getElementById('res-port').textContent = port;
         document.getElementById('path').textContent = path;
