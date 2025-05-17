@@ -29,7 +29,7 @@
     <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
     <div>🔑 Password: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
     <div>🛡️ Method: <span id="none"></span></div>
-    <div>📁 Plugin: <span id="websocket"></span></div>
+    <div>📁 Plugin: <span id="path"></span></div>
     <div>🔗 Link:
       <textarea readonly id="ss-link" class="w-full mt-1 p-2 bg-gray-100 rounded text-xs"></textarea>
     </div>
@@ -56,7 +56,7 @@
 
       const [ip, port] = ipPort.split(':');
       const password = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
-      const path = `${ip}-${port}`;
+      const path = `/Club-Gratis/${ip}-${port}`;
       const method = 'none';
       const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
 
@@ -70,8 +70,8 @@
         }
 
         const remarks = `${data.country} ${data.flag} [${data.isp}]`;
-        const plugin = `path=/Club-Gratis/${path}`;
-        const userInfo = btoa(`${password}`);
+        const plugin = `${path}`;
+        const userInfo = `${password}`;
         const link = `ss://${userinfo}@${bug}:443?plugin=${encodeURIComponent(plugin)}#${encodeURIComponent(remarks)}`;
 
         // Tampilkan hasil
