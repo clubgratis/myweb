@@ -61,8 +61,8 @@
         const checkURL = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
         const res = await fetch(checkURL);
         const data = await res.json();
-        
-        if (data.message?.includes('ACTIVE') ? "✅ ACTIVE" : "❌ DEAD")) {
+
+        if (!data.active) {
           alert('Status tidak aktif!');
           return;
         }
