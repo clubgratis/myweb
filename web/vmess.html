@@ -60,10 +60,10 @@
       try {
         const checkURL = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
         const res = await fetch(checkURL);
-        const data = await res.json();
-
-        if (data.message?.includes('ACTIVE') ? "✅ ACTIVE" : "❌ DEAD") {
-          alert('Proxy tidak aktif!');
+        const data = await response.json();
+        
+        if (data.message?.includes('ACTIVE') ? "✅ ACTIVE" : "❌ DEAD")) {
+          alert('Status tidak aktif!');
           return;
         }
 
