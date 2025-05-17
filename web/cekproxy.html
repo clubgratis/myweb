@@ -57,8 +57,8 @@
         const data = await res.json();
 
         // Tampilkan data lengkap
-        document.getElementById('status').textContent = data.active ? 'Aktif' : 'Mati';
-        document.getElementById('status').className = data.active ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
+        document.getElementById('status').textContent = data.message?.includes('ACTIVE') ? "✅ ACTIVE" : "❌ DEAD";
+        document.getElementById('status').className = data.message ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
         document.getElementById('proxyip').textContent = data.proxyip ? '✅ Yes' : '❌ No';
         document.getElementById('ip').textContent = ip;
         document.getElementById('port').textContent = port;
