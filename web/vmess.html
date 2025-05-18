@@ -99,7 +99,6 @@
   <div id="result" class="hidden">
     <h3>Hasil Akun VMess:</h3>
     <p><strong>🌐 REMARKS:</strong> <span id="remarks"></span></p>
-    <p><strong>📶 ASN:</strong> <span id="asn"></span></p>
     <p><strong>🟢 PING:</strong> <span id="ping" style="color:green;"></span></p>
     <p><strong>📡 DOMAIN:</strong> <span id="res-domain"></span></p>
     <p><strong>🐞 BUG:</strong> <span id="res-bug"></span></p>
@@ -150,8 +149,8 @@
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
         const ping = `${data.delay || '-'}`;
-        const asn = `AS${data.asn || '-'}`;
         const host = `${bug}.${domain}`;
+        
         const linkObject = {
           v: "2",
           ps: remarks,
@@ -172,7 +171,6 @@
         const vmessLink = "vmess://" + toBase64Unicode(JSON.stringify(linkObject));
         
         document.getElementById('remarks').textContent = remarks;
-        document.getElementById('asn').textContent = asn;
         document.getElementById('ping').textContent = ping;
         document.getElementById('uuid').textContent = uuid;
         document.getElementById('bughost').textContent = host;
