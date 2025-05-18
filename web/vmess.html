@@ -37,11 +37,12 @@
   <button onclick="generateVMess()">Buat Akun VMess</button>
 
   <div id="result" class="hidden">
-    <h3>VMess TLS (Port 443)</h3>
+    <h3>Informasi Account VMess:</h3>
     <p><strong>Remarks:</strong> <span id="remarks"></span></p>
     <p><strong>Domain:</strong> <span id="res-domain"></span></p>
     <p><strong>Bug:</strong> <span id="res-bug"></span></p>
     <p><strong>Path:</strong> <span id="path"></span></p>
+    <h3>VMess TLS (Port 443)</h3>
     <textarea id="vmess-link" readonly></textarea>
     <div class="qr">
       <img id="qrcode" src="" alt="QR Code VMess TLS">
@@ -59,7 +60,7 @@
   </div>
 
   <footer>
-    <p>Kontak Grup Telegram: @akunvpn</p>
+    <p>Kontak Grup Telegram: Club Gratis</p>
     <p>&copy; 2025 Akun Gratisan</p>
   </footer>
 
@@ -92,6 +93,7 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
+        const host = `${bug}.${domain}`;
 
         // TLS
         const linkTLS = {
@@ -103,7 +105,7 @@
           aid: "0",
           net: "ws",
           type: "none",
-          host: domain,
+          host: host,
           path: path,
           tls: "tls",
           scy: "zero"
@@ -119,7 +121,7 @@
           aid: "0",
           net: "ws",
           type: "none",
-          host: domain,
+          host: host,
           path: path,
           tls: "",
           scy: "zero"
