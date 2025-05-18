@@ -77,25 +77,35 @@
   <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443" />
   <select id="domain">
     <option value="">-- Pilih Domain --</option>
-    <option value="example.com">example.com</option>
-    <option value="akungratisan.xyz">akungratisan.xyz</option>
+    <option value="clubgratis.xyz">clubgratis.xyz</option>
+    <option value="akungratis.dpdns.org">akungratis.dpdns.org</option>
+    <option value="wilcardcf.biz.id">wilcardcf.biz.id</option>
+    <option value="mrkings.xyz">mrkings.xyz</option>
   </select>
   <select id="bug">
     <option value="">-- Pilih Bug Wildcard --</option>
-    <option value="bug.com">bug.com</option>
-    <option value="*.bughost.com">*.bughost.com</option>
+    <option value="ava.game.naver.com">ava.game.naver.com</option>
+    <option value="graph.instagram.com">graph.instagram.com</option>
+    <option value="quiz.int.vidio.com">quiz.int.vidio.com</option>
+    <option value="zaintest.vuclip.com">zaintest.vuclip.com</option>
+    <option value="cache.netflix.com">cache.netflix.com</option>
+    <option value="graph.facebook.com">graph.facebook.com</option>
+    <option value="investor.fb.com">investor.fb.com</option>
+    <option value="*.request.bughost.com">*.request.bughost.com</option>
   </select>
 
   <button onclick="generateVMess()">Buat Akun VMess</button>
 
   <div id="result" class="hidden">
     <h3>Hasil Akun VMess:</h3>
-    <p><strong>🌐 Remarks:</strong> <span id="remarks"></span></p>
-    <p><strong>🟢 Ping:</strong> <span id="ping" style="color:green;"></span></p>
-    <p><strong>Domain:</strong> <span id="res-domain"></span></p>
-    <p><strong>Bug:</strong> <span id="res-bug"></span></p>
-    <p><strong>Port:</strong> <span id="res-port"></span></p>
-    <p><strong>Path:</strong> <span id="path"></span></p>
+    <p><strong>🌐 REMARKS:</strong> <span id="remarks"></span></p>
+    <p><strong>📶 ASN:</strong> <span id="asn"></span></p>
+    <p><strong>🟢 PING:</strong> <span id="ping" style="color:green;"></span></p>
+    <p><strong>📡 DOMAIN:</strong> <span id="res-domain"></span></p>
+    <p><strong>🐞 BUG:</strong> <span id="res-bug"></span></p>
+    <p><strong>🆔 UUID:</strong> <span id="uuid"></span></p>
+    <p><strong>🚪 PORT:</strong> <span id="res-port"></span></p>
+    <p><strong>📁 PATH:</strong> <span id="path"></span></p>
     <textarea id="vmess-link" readonly></textarea>
     <div class="qr">
       <img id="qrcode" src="" alt="QR Code VMess">
@@ -104,8 +114,8 @@
   </div>
 
   <footer>
-    <p>Kontak Grup: https://t.me/club_gtratis</p>
-    <p>&copy; 2025 Club Gratis. All rights reserved.</p>
+    <p>Kontak Grup: <a href="https://t.me/club_gratis">Telegram</a></p>
+    <p>&copy; 2025 <a href="https://t.me/club_gratis1">Club Gratis.</a></p><p> All rights reserved.</p>
   </footer>
 
   <script>
@@ -139,30 +149,34 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const ping = `${data.delay}`;
-
+        const ping = `${data.delay || '-'}`;
+        const asn = `AS${data.asn || '-'}`;
+        const bughost = `${bug}.${domain}`;
         const linkObject = {
           v: "2",
           ps: remarks,
           add: bug,
           port: "443",
-          id: uuid,
+          id: UUID,
           aid: "0",
           net: "ws",
           type: "none",
-          host: domain,
+          host: bughost,
           path: path,
           tls: "tls",
+          sni: bughost,
+          alpn: "",
           scy: "zero"
-        };
+         };
 
         const vmessLink = "vmess://" + toBase64Unicode(JSON.stringify(linkObject));
         
         document.getElementById('remarks').textContent = remarks;
+        document.getElementById('ping').textContent = ping;
         document.getElementById('res-domain').textContent = domain;
         document.getElementById('res-bug').textContent = bug;
         document.getElementById('res-port').textContent = port;
-        document.getElementById('path').textContent = path;
+        document.getElementaddById('path').textContent = path;
         document.getElementById('vmess-link').value = vmessLink;
         document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessLink)}`;
         resultBox.classList.remove('hidden');
