@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,119 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Generate VMess Account</title>
   <style>
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-      background: #f9f9f9;
-      position: relative;
-    }
-    .logo {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #ccc;
-    }
-    input, select, button {
-      display: block;
-      width: 100%;
-      margin-bottom: 12px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-    button {
-      background: #007BFF;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .hidden {
-      display: none;
-    }
-    #result {
-      margin-top: 20px;
-      padding: 15px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .qr {
-      text-align: center;
-      margin-top: 10px;
-    }
-    textarea {
-      width: 100%;
-      height: 80px;
-      border-radius: 8px;
-      padding: 10px;
-    }
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 14px;
-      color: #666;
-    }
+    body { font-family: sans-serif; padding: 20px; max-width: 700px; margin: auto; background: #f9f9f9; position: relative; }
+    input, select, button { display: block; width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    button { background: #007BFF; color: white; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .hidden { display: none; }
+    #result { margin-top: 20px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .qr { text-align: center; margin-top: 10px; }
+    textarea { width: 100%; height: 80px; border-radius: 8px; padding: 10px; }
+    .logo { position: absolute; top: 10px; right: 10px; width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+    footer { margin-top: 40px; text-align: center; color: #777; font-size: 14px; }
   </style>
 </head>
 <body>
 
-  <img src="logo.jpg" alt="Logo" class="logo" />
-
+  <img src="logo.jpg" alt="Logo" class="logo">
   <h2>Generate Akun VMess</h2>
 
   <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443" />
   <select id="domain">
     <option value="">-- Pilih Domain --</option>
-    <option value="clubgratis.xyz">clubgratis.xyz</option>
-    <option value="akungratis.dpdns.org">akungratis.dpdns.org</option>
-    <option value="wilcardcf.biz.id">wilcardcf.biz.id</option>
-    <option value="mrkings.xyz">mrkings.xyz</option>
+    <option value="example.com">example.com</option>
+    <option value="akungratisan.xyz">akungratisan.xyz</option>
   </select>
   <select id="bug">
     <option value="">-- Pilih Bug Wildcard --</option>
-    <option value="ava.game.naver.com">ava.game.naver.com</option>
-    <option value="graph.instagram.com">graph.instagram.com</option>
-    <option value="quiz.int.vidio.com">quiz.int.vidio.com</option>
-    <option value="investor.fb.com">investor.fb.com</option>
-    <option value="support.zoom.us">support.zoom.us</option>
-    <option value="zaintest.vuclip.com">zaintest.vuclip.com</option>
+    <option value="bug.com">bug.com</option>
+    <option value="*.bughost.com">*.bughost.com</option>
   </select>
 
   <button onclick="generateVMess()">Buat Akun VMess</button>
 
   <div id="result" class="hidden">
-    <h3>Hasil Akun VMess:</h3>
-    <p><strong>🌐 Remarks:</strong> <span id="remarks"></span></p>
-    <p><strong>🛰️ Domain:</strong> <span id="res-domain"></span></p>
-    <p><strong>🆔 UUID:</strong> <span id="uuid"></span></p>
-    <p><strong>🐞 Bug:</strong> <span id="res-bug"></span></p>
-    <p><strong>🚪 Port:</strong> <span id="res-port"></span></p>
-    <p><strong>📁Path:</strong> <span id="path"></span></p>
+    <h3>VMess TLS (Port 443)</h3>
+    <p><strong>Remarks:</strong> <span id="remarks"></span></p>
+    <p><strong>Domain:</strong> <span id="res-domain"></span></p>
+    <p><strong>Bug:</strong> <span id="res-bug"></span></p>
+    <p><strong>Path:</strong> <span id="path"></span></p>
     <textarea id="vmess-link" readonly></textarea>
     <div class="qr">
-      <img id="qrcode" src="" alt="QR Code VMess">
+      <img id="qrcode" src="" alt="QR Code VMess TLS">
     </div>
-    <button onclick="copyConfig()">Salin Konfigurasi</button>
+    <button onclick="copyConfig('vmess-link')">Salin Konfigurasi TLS</button>
+
+    <hr style="margin: 30px 0;">
+
+    <h3>VMess non-TLS (Port 80)</h3>
+    <textarea id="vmess-link-nontls" readonly></textarea>
+    <div class="qr">
+      <img id="qrcode-nontls" src="" alt="QR Code VMess Non-TLS">
+    </div>
+    <button onclick="copyConfig('vmess-link-nontls')">Salin Konfigurasi non-TLS</button>
   </div>
 
   <footer>
-    <p>Kontak Grup: <a href="https://t.me/club_gratis">Telegram</a></p>
-    <p>&copy; 2025 Club Gratis. All rights reserved.</p>
+    <p>Kontak Grup Telegram: @akunvpn</p>
+    <p>&copy; 2025 Akun Gratisan</p>
   </footer>
 
   <script>
     function toBase64Unicode(str) {
       return btoa(unescape(encodeURIComponent(str)));
     }
-    
     async function generateVMess() {
       const ipPort = document.getElementById('ipPort').value.trim();
       const domain = document.getElementById('domain').value.trim();
@@ -137,7 +85,6 @@
       try {
         const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
         const data = await res.json();
-        console.log('✅ Data Proxy:', data);
 
         if (!data.message || !data.message.includes('ACTIVE')) {
           alert('Proxy tidak aktif!');
@@ -145,9 +92,9 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const host = `${bug}.${domain}`;
 
-        const linkObject = {
+        // TLS
+        const linkTLS = {
           v: "2",
           ps: remarks,
           add: bug,
@@ -156,36 +103,52 @@
           aid: "0",
           net: "ws",
           type: "none",
-          host: host,
+          host: domain,
           path: path,
           tls: "tls",
           scy: "zero"
         };
 
-        const vmessLink = "vmess://" + toBase64Unicode(JSON.stringify(linkObject));
-        
+        // non-TLS
+        const linkNonTLS = {
+          v: "2",
+          ps: remarks,
+          add: bug,
+          port: "80",
+          id: uuid,
+          aid: "0",
+          net: "ws",
+          type: "none",
+          host: domain,
+          path: path,
+          tls: "",
+          scy: "zero"
+        };
+
+        const vmessTLS = "vmess://" + toBase64Unicode(JSON.stringify(linkTLS));
+        const vmessNonTLS = "vmess://" + toBase64Unicode(JSON.stringify(linkNonTLS));
+
         document.getElementById('remarks').textContent = remarks;
         document.getElementById('res-domain').textContent = domain;
-        document.getElementById('uuid').textContent = uuid;
         document.getElementById('res-bug').textContent = bug;
-        document.getElementById('res-port').textContent = port;
         document.getElementById('path').textContent = path;
-        document.getElementById('vmess-link').value = vmessLink;
-        document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessLink)}`;
+        document.getElementById('vmess-link').value = vmessTLS;
+        document.getElementById('vmess-link-nontls').value = vmessNonTLS;
+        document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessTLS)}`;
+        document.getElementById('qrcode-nontls').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessNonTLS)}`;
         resultBox.classList.remove('hidden');
-
       } catch (err) {
-        console.error('❌ Gagal mengambil data proxy:', err);
+        console.error('Gagal mengambil data proxy:', err);
         alert('Gagal mengambil data proxy.');
       }
     }
 
-    function copyConfig() {
-      const link = document.getElementById('vmess-link');
+    function copyConfig(id) {
+      const link = document.getElementById(id);
       link.select();
       link.setSelectionRange(0, 99999);
       document.execCommand("copy");
-      alert("Konfigurasi VMess disalin!");
+      alert("Konfigurasi disalin!");
     }
   </script>
 
