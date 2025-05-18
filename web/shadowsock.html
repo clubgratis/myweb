@@ -43,6 +43,8 @@
     <textarea id="ss-link-tls" readonly></textarea>
     <div class="qr">
       <img id="qrcode-tls" src="" alt="QR Code SS TLS">
+
+      <button onclick="copyConfig('ss-link-tls')">Salin Konfigurasi TLS</button>
     </div>
   </div>
 
@@ -53,10 +55,10 @@
     <textarea id="ss-link-nontls" readonly></textarea>
     <div class="qr">
       <img id="qrcode-nontls" src="" alt="QR Code SS Non-TLS">
+
+      <button onclick="copyConfig('ss-link-nontls')">Salin Konfigurasi NonTLS</button>
     </div>
   </div>
-
-  <button onclick="copyConfig()">Salin Konfigurasi</button>
 
   <footer>
     <p>Kontak Grup Telegram: @akun_gratisan</p>
@@ -108,11 +110,12 @@
       }
     }
 
-    function copyConfig() {
-      const tls = document.getElementById('ss-link-tls');
-      const nonTls = document.getElementById('ss-link-nontls');
-      navigator.clipboard.writeText(`${tls.value}\n${nonTls.value}`);
-      alert('Dua konfigurasi Shadowsocks disalin!');
+    function copyConfig(id) {
+      const link = document.getElementById(id);
+      link.select();
+      link.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Konfigurasi disalin!");
     }
   </script>
 
