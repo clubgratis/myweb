@@ -67,10 +67,11 @@
 
     <button onclick="copyConfig('vless-nontls')">Salin Config NonTLS</button>
   </div>
-
+ </div>
+  
   <footer>
     <p><a href="http://t.me/club_gratis">Contact</a></p>
-    <p>&copy; 2025 | Club Gratis</p>
+    <p>&copy; 2025 Club Gratis</p>
   </footer>
 
   <script>
@@ -99,7 +100,7 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const pnig = `${data.delay}`;
+        const ping = `${data.delay}`;
         const host = `${bug}.${domain}`;
 
         const linkTLS = `vless://${uuid}@${bug}:443?encryption=none&security=tls&type=ws&host=${host}&path=${path}#${remarks}`;
