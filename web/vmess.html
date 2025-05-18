@@ -48,6 +48,10 @@
   </div>
 
   <script>
+    function toBase64Unicode(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
     async function generateVMess() {
       const ipPort = document.getElementById('ipPort').value.trim();
       const domain = document.getElementById('domain').value.trim();
@@ -90,7 +94,7 @@
           scy: "zero"
         };
 
-        const vmessLink = "vmess://" + btoa(JSON.stringify(linkObject));
+        const vmessLink = "vmess://" + toBase64Unicode(JSON.stringify(linkObject));
 
         document.getElementById('remarks').textContent = remarks;
         document.getElementById('res-domain').textContent = domain;
