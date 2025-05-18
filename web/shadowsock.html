@@ -20,26 +20,37 @@
 <body>
 
   <img src="logo.jpg" alt="Logo" class="logo">
-  <h2>Generate Akun Shadowsocks</h2>
+  <h2>Generate Shadowsocks</h2>
 
   <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443" />
   <select id="domain">
     <option value="">-- Pilih Domain --</option>
-    <option value="example.com">example.com</option>
-    <option value="akungratisan.xyz">akungratisan.xyz</option>
+    <option value="clubgratis.xyz">clubgratis.xyz</option>
+    <option value="akungratis.dpdns.org">akungratis.dpdns.org</option>
+    <option value="wilcardcf.biz.id">wilcardcf.biz.id</option>
+    <option value="mrkings.xyz">mrkings.xyz</option>
   </select>
   <select id="bug">
     <option value="">-- Pilih Bug Wildcard --</option>
-    <option value="bug.com">bug.com</option>
-    <option value="*.bughost.com">*.bughost.com</option>
+    <option value="ava.game.naver.com">ava.game.naver.com</option>
+    <option value="graph.instagram.com">graph.instagram.com</option>
+    <option value="quiz.int.vidio.com">quiz.int.vidio.com</option>
+    <option value="investor.fb.com">investor.fb.com</option>
+    <option value="support.zoom.us">support.zoom.us</option>
+    <option value="zaintest.vuclip.com">zaintest.vuclip.com</option>
   </select>
 
   <button onclick="generateSS()">Buat Akun Shadowsocks</button>
 
   <div id="result" class="hidden">
+    <h3>Information Account:</h3>
+    <p><strong>🌐 Remarks:</strong> <span id="remarks"></span></p>
+    <p><strong>🟢 Ping:</strong> <span id="ping" style="color:green;"></span></p>
+    <p><strong>🛜 Domain:</strong> <span id="res-domain"></span></p>
+    <p><strong>🐞 Bug:</strong> <span id="res-bug"></span></p>
+    <p><strong>🆔 UUID:</strong> <span id="uuid"></span></p>
+    <p><strong>📁 Path:</strong> <span id="path"></span></p>
     <h3>Shadowsocks TLS:</h3>
-    <p><strong>Remarks:</strong> <span id="remarks-tls"></span></p>
-    <p><strong>Port:</strong> 443</p>
     <textarea id="ss-link-tls" readonly></textarea>
     <div class="qr">
       <img id="qrcode-tls" src="" alt="QR Code SS TLS">
@@ -50,8 +61,6 @@
 
   <div id="resultNonTLS" class="hidden">
     <h3>Shadowsocks Non-TLS:</h3>
-    <p><strong>Remarks:</strong> <span id="remarks-nontls"></span></p>
-    <p><strong>Port:</strong> 80</p>
     <textarea id="ss-link-nontls" readonly></textarea>
     <div class="qr">
       <img id="qrcode-nontls" src="" alt="QR Code SS Non-TLS">
@@ -89,17 +98,21 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
+        const ping = '${data.delay || '-'}';
         const method = 'none';
         const host= `${bug}.${domain}`;
 
         const ssLinkTLS = `ss://${btoa(`${method}:${uuid}`)}@${bug}:443?path=${path}&security=tls&host=${host}&type=ws&sni=${host}#${encodeURIComponent(remarks)}`;
         const ssLinkNonTLS = `ss://${btoa(`${method}:${uuid}`)}@${bug}:80?path=${path}&security=none&type=ws&host=${host}#${encodeURIComponent(remarks)}`;
 
-        document.getElementById('remarks-tls').textContent = remarks;
+        document.getElementById('remarks').textContent = remarks;
+        document.getElementById('ping').textContent = ping;
+        document.getElementById('domain').textContent = domain;
+        document.getElementById('bug').textContent = bug;
+        document.getElementById('path').textContent = path;
         document.getElementById('ss-link-tls').value = ssLinkTLS;
         document.getElementById('qrcode-tls').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ssLinkTLS)}`;
 
-        document.getElementById('remarks-nontls').textContent = remarks;
         document.getElementById('ss-link-nontls').value = ssLinkNonTLS;
         document.getElementById('qrcode-nontls').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ssLinkNonTLS)}`;
 
