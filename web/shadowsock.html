@@ -45,7 +45,7 @@
   <div id="result" class="hidden">
     <h3>Information Account:</h3>
     <p><strong>🌐 Remarks:</strong> <span id="remarks"></span></p>
-    <p><strong>🟢 Ping:</strong> <span id="ping" style="color:green;"></span></p>
+    <p><strong>🟢 Ping:</strong> <span id="ping"></span></p>
     <p><strong>🛜 Domain:</strong> <span id="res-domain"></span></p>
     <p><strong>🐞 Bug:</strong> <span id="res-bug"></span></p>
     <p><strong>🆔 UUID:</strong> <span id="uuid"></span></p>
@@ -98,7 +98,7 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const ping = '${data.delay || '-'}';
+        const ping = '${data.delay}';
         const method = 'none';
         const host= `${bug}.${domain}`;
 
@@ -109,6 +109,7 @@
         document.getElementById('ping').textContent = ping;
         document.getElementById('domain').textContent = domain;
         document.getElementById('bug').textContent = bug;
+        document.getElementById('uuid').textContent = uuid;
         document.getElementById('path').textContent = path;
         document.getElementById('ss-link-tls').value = ssLinkTLS;
         document.getElementById('qrcode-tls').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ssLinkTLS)}`;
