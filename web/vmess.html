@@ -2,112 +2,119 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Buat Akun VMess</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Generate VMess Account</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; background: #f9f9f9; }
+    input, select, button { display: block; width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    button { background: #007BFF; color: white; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .hidden { display: none; }
+    #result { margin-top: 20px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .qr { text-align: center; margin-top: 10px; }
+    textarea { width: 100%; height: 80px; border-radius: 8px; padding: 10px; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body>
 
-  <!-- Header -->
-  <div class="bg-blue-600 text-white text-center py-4 text-xl font-semibold">
-    ✅ VMess Created
-  </div>
+  <h2>Generate Akun VMess</h2>
 
-  <!-- Form Input -->
-  <div class="max-w-md mx-auto mt-6 p-4 bg-white rounded shadow space-y-4">
-    <input id="ipPort" type="text" placeholder="Masukkan IP:Port (contoh: 104.26.14.14:443)" class="w-full border p-2 rounded" />
-    <input id="domain" type="text" placeholder="Domain (contoh: bug.cloudflare.com)" class="w-full border p-2 rounded" />
-    <input id="bug" type="text" placeholder="Bug Wildcard (contoh: cdn.cloudflare.net)" class="w-full border p-2 rounded" />
-    <button onclick="generateVMess()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
-      🔧 Buat Akun
-    </button>
-  </div>
+  <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443" />
+  <select id="domain">
+    <option value="">-- Pilih Domain --</option>
+    <option value="example.com">example.com</option>
+    <option value="akungratisan.xyz">akungratisan.xyz</option>
+  </select>
+  <select id="bug">
+    <option value="">-- Pilih Bug Wildcard --</option>
+    <option value="bug.com">bug.com</option>
+    <option value="*.bughost.com">*.bughost.com</option>
+  </select>
 
-  <!-- Hasil -->
-  <div id="result" class="max-w-md mx-auto mt-4 p-4 bg-white rounded shadow hidden space-y-3 text-sm">
-    <div>🌐 Remark: <span id="remarks" class="font-semibold"></span></div>
-    <div>📡 Domain: <span id="res-domain"></span></div>
-    <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
-    <div>🆔 UUID: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
-    <div>🚪 Port: <span id="res-port"></span></div>
-    <div>🔐 TLS: TLS</div>
-    <div>📁 Path: <span id="path"></span></div>
-    <div>🔗 Link:
-      <textarea readonly id="vmess-link" class="w-full mt-1 p-2 bg-gray-100 rounded text-xs"></textarea>
+  <button onclick="generateVMess()">Buat Akun VMess</button>
+
+  <div id="result" class="hidden">
+    <h3>Hasil Akun VMess:</h3>
+    <p><strong>Remarks:</strong> <span id="remarks"></span></p>
+    <p><strong>Domain:</strong> <span id="res-domain"></span></p>
+    <p><strong>Bug:</strong> <span id="res-bug"></span></p>
+    <p><strong>Port:</strong> <span id="res-port"></span></p>
+    <p><strong>Path:</strong> <span id="path"></span></p>
+    <textarea id="vmess-link" readonly></textarea>
+    <div class="qr">
+      <img id="qrcode" src="" alt="QR Code VMess">
     </div>
-    <div class="text-center">
-      <img id="qrcode" src="" alt="QR Code" class="mx-auto my-2 rounded shadow" />
-      <button onclick="copyConfig()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-        📋 Salin Konfigurasi
-      </button>
-    </div>
+    <button onclick="copyConfig()">Salin Konfigurasi</button>
   </div>
 
-  <!-- Script -->
   <script>
     async function generateVMess() {
-  const ipPort = document.getElementById('ipPort').value.trim();
-  const domain = document.getElementById('domain').value.trim();
-  const bug = document.getElementById('bug').value.trim();
-  const resultBox = document.getElementById('result');
+      const ipPort = document.getElementById('ipPort').value.trim();
+      const domain = document.getElementById('domain').value.trim();
+      const bug = document.getElementById('bug').value.trim();
+      const resultBox = document.getElementById('result');
 
-  if (!ipPort || !domain || !bug || !ipPort.includes(':')) {
-    alert('Isi semua field dengan benar.');
-    return;
-  }
+      if (!ipPort || !domain || !bug || !ipPort.includes(':')) {
+        alert('Isi semua field dengan benar.');
+        return;
+      }
 
-  const [ip, port] = ipPort.split(':');
-  const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
-  const path = `/Club-Gratis/${ip}-${port}`;
+      const [ip, port] = ipPort.split(':');
+      const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
+      const path = `/Club-Gratis/${ip}-${port}`;
 
-  try {
-    const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
-    const data = await res.json();
-    console.log("Response dari API:", data);
+      try {
+        const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
+        const data = await res.json();
+        console.log('✅ Data Proxy:', data);
 
-    if (!data.message || !data.message.includes('ACTIVE')) {
-      alert('Proxy tidak aktif!');
-      return;
-    }
+        if (!data.message || !data.message.includes('ACTIVE')) {
+          alert('Proxy tidak aktif!');
+          return;
+        }
 
-    const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
+        const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
 
-    const linkObject = {
-      v: "2",
-      ps: remarks,
-      add: bug,
-      port: "443",
-      id: uuid,
-      aid: "0",
-      net: "ws",
-      type: "none",
-      host: domain,
-      path: path,
-      tls: "tls",
-      scy: "zero"
-    };
+        const linkObject = {
+          v: "2",
+          ps: remarks,
+          add: bug,
+          port: "443",
+          id: uuid,
+          aid: "0",
+          net: "ws",
+          type: "none",
+          host: domain,
+          path: path,
+          tls: "tls",
+          scy: "zero"
+        };
 
-    const vmessLink = "vmess://" + btoa(JSON.stringify(linkObject));
+        const vmessLink = "vmess://" + btoa(JSON.stringify(linkObject));
 
-    document.getElementById('remarks').textContent = remarks;
-    document.getElementById('res-domain').textContent = domain;
-    document.getElementById('res-bug').textContent = bug;
-    document.getElementById('res-port').textContent = port;
-    document.getElementById('path').textContent = path;
-    document.getElementById('vmess-link').value = vmessLink;
-    document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessLink)}`;
-    resultBox.classList.remove('hidden');
+        document.getElementById('remarks').textContent = remarks;
+        document.getElementById('res-domain').textContent = domain;
+        document.getElementById('res-bug').textContent = bug;
+        document.getElementById('res-port').textContent = port;
+        document.getElementById('path').textContent = path;
+        document.getElementById('vmess-link').value = vmessLink;
+        document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessLink)}`;
+        resultBox.classList.remove('hidden');
 
-  } catch (err) {
-    alert('Gagal mengambil data proxy.');
-    console.error('Error:', err);
-  }
-}
+      } catch (err) {
+        console.error('❌ Gagal mengambil data proxy:', err);
+        alert('Gagal mengambil data proxy.');
+      }
+    }
+
     function copyConfig() {
       const link = document.getElementById('vmess-link');
       link.select();
-      document.execCommand('copy');
-      alert('Konfigurasi berhasil disalin!');
+      link.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Konfigurasi VMess disalin!");
     }
   </script>
+
 </body>
 </html>
