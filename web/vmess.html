@@ -87,24 +87,21 @@
     <option value="ava.game.naver.com">ava.game.naver.com</option>
     <option value="graph.instagram.com">graph.instagram.com</option>
     <option value="quiz.int.vidio.com">quiz.int.vidio.com</option>
-    <option value="zaintest.vuclip.com">zaintest.vuclip.com</option>
-    <option value="cache.netflix.com">cache.netflix.com</option>
-    <option value="graph.facebook.com">graph.facebook.com</option>
     <option value="investor.fb.com">investor.fb.com</option>
-    <option value="*.request.bughost.com">*.request.bughost.com</option>
+    <option value="support.zoom.us">support.zoom.us</option>
+    <option value="zaintest.vuclip.com">zaintest.vuclip.com</option>
   </select>
 
   <button onclick="generateVMess()">Buat Akun VMess</button>
 
   <div id="result" class="hidden">
     <h3>Hasil Akun VMess:</h3>
-    <p><strong>🌐 REMARKS:</strong> <span id="remarks"></span></p>
-    <p><strong>🟢 PING:</strong> <span id="ping" style="color:green;"></span></p>
-    <p><strong>📡 DOMAIN:</strong> <span id="res-domain"></span></p>
-    <p><strong>🐞 BUG:</strong> <span id="res-bug"></span></p>
+    <p><strong>🌐 Remarks:</strong> <span id="remarks"></span></p>
+    <p><strong>🛰️ Domain:</strong> <span id="res-domain"></span></p>
     <p><strong>🆔 UUID:</strong> <span id="uuid"></span></p>
-    <p><strong>🚪 PORT:</strong> <span id="res-port"></span></p>
-    <p><strong>📁 PATH:</strong> <span id="path"></span></p>
+    <p><strong>🐞 Bug:</strong> <span id="res-bug"></span></p>
+    <p><strong>🚪 Port:</strong> <span id="res-port"></span></p>
+    <p><strong>📁Path:</strong> <span id="path"></span></p>
     <textarea id="vmess-link" readonly></textarea>
     <div class="qr">
       <img id="qrcode" src="" alt="QR Code VMess">
@@ -114,7 +111,7 @@
 
   <footer>
     <p>Kontak Grup: <a href="https://t.me/club_gratis">Telegram</a></p>
-    <p>&copy; 2025 <a href="https://t.me/club_gratis1">Club Gratis.</a></p><p> All rights reserved.</p>
+    <p>&copy; 2025 Club Gratis. All rights reserved.</p>
   </footer>
 
   <script>
@@ -149,30 +146,27 @@
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
         const host = `${bug}.${domain}`;
-        
+
         const linkObject = {
           v: "2",
           ps: remarks,
           add: bug,
           port: "443",
-          id: UUID,
+          id: uuid,
           aid: "0",
           net: "ws",
           type: "none",
           host: host,
           path: path,
           tls: "tls",
-          sni: host,
-          alpn: "",
           scy: "zero"
-         };
+        };
 
         const vmessLink = "vmess://" + toBase64Unicode(JSON.stringify(linkObject));
         
         document.getElementById('remarks').textContent = remarks;
-        document.getElementById('uuid').textContent = uuid;
-        document.getElementById('host').textContent = host;
         document.getElementById('res-domain').textContent = domain;
+        document.getElementById('uuid').textContent = uuid;
         document.getElementById('res-bug').textContent = bug;
         document.getElementById('res-port').textContent = port;
         document.getElementById('path').textContent = path;
