@@ -90,7 +90,8 @@
 
   <div id="result" class="hidden">
     <h3>Hasil Akun VMess:</h3>
-    <p><strong>Remarks:</strong> <span id="remarks"></span></p>
+    <p><strong>🌐 Remarks:</strong> <span id="remarks"></span></p>
+    <p><strong>🟢 Ping:</strong> <span id="ping" style="color:green;"></span></p>
     <p><strong>Domain:</strong> <span id="res-domain"></span></p>
     <p><strong>Bug:</strong> <span id="res-bug"></span></p>
     <p><strong>Port:</strong> <span id="res-port"></span></p>
@@ -138,6 +139,7 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
+        const ping = `${data.delay}`;
 
         const linkObject = {
           v: "2",
