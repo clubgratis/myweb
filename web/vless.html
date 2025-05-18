@@ -1,49 +1,60 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Buat Akun VLESS</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Generate VLESS Account</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; background: #f9f9f9; }
+    input, select, button { display: block; width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    button { background: #28a745; color: white; cursor: pointer; }
+    button:hover { background: #1e7e34; }
+    .hidden { display: none; }
+    #result { margin-top: 20px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .qr { text-align: center; margin-top: 10px; }
+    textarea { width: 100%; height: 80px; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+    footer { text-align: center; margin-top: 40px; font-size: 0.9em; color: #777; }
+    header img { width: 40px; height: 40px; border-radius: 50%; float: right; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body>
+  <header>
+    <img src="https://via.placeholder.com/40" alt="Logo" />
+    <h2>Generate Akun VLESS</h2>
+  </header>
 
-  <!-- Header -->
-  <div class="bg-green-600 text-white text-center py-4 text-xl font-semibold">
-    ✅ VLESS Created
+  <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443" />
+  <select id="domain">
+    <option value="">-- Pilih Domain --</option>
+    <option value="example.com">example.com</option>
+    <option value="akungratisan.xyz">akungratisan.xyz</option>
+  </select>
+  <select id="bug">
+    <option value="">-- Pilih Bug Wildcard --</option>
+    <option value="bug.com">bug.com</option>
+    <option value="*.bughost.com">*.bughost.com</option>
+  </select>
+
+  <button onclick="generateVLESS()">Buat Akun VLESS</button>
+
+  <div id="result" class="hidden">
+    <h3>Hasil Akun VLESS:</h3>
+
+    <p><strong>Akun TLS (443)</strong></p>
+    <textarea id="vless-tls" readonly></textarea>
+    <div class="qr"><img id="qr-tls" src="" alt="QR Code TLS"></div>
+
+    <p><strong>Akun Non-TLS (80)</strong></p>
+    <textarea id="vless-nontls" readonly></textarea>
+    <div class="qr"><img id="qr-nontls" src="" alt="QR Code Non-TLS"></div>
+
+    <button onclick="copyAll()">Salin Semua Konfigurasi</button>
   </div>
 
-  <!-- Form Input -->
-  <div class="max-w-md mx-auto mt-6 p-4 bg-white rounded shadow space-y-4">
-    <input id="ipPort" type="text" placeholder="Masukkan IP:Port (contoh: 104.26.14.14:443)" class="w-full border p-2 rounded" />
-    <input id="domain" type="text" placeholder="Domain (contoh: bug.cloudflare.com)" class="w-full border p-2 rounded" />
-    <input id="bug" type="text" placeholder="Bug Wildcard (contoh: cdn.cloudflare.net)" class="w-full border p-2 rounded" />
-    <button onclick="generateVLESS()" class="w-full bg-green-600 text-white p-2 rounded hover:bg-black-700">
-      🔧 Buat Akun
-    </button>
-  </div>
+  <footer>
+    <p>Kontak: t.me/akun_gratisan | &copy; 2025 Akun Gratisan</p>
+  </footer>
 
-  <!-- Hasil -->
-  <div id="result" class="max-w-md mx-auto mt-4 p-4 bg-white rounded shadow hidden space-y-3 text-sm">
-    <div>🌐 Remark: <span id="remarks" class="font-semibold" style="color:green;"></span></div>
-    <div>🟢 Ping: <span id="ping" class="font-semibold" style="color:green;"></span></div>
-    <div>📡 Domain: <span id="res-domain"></span></div>
-    <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
-    <div>🆔 UUID: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
-    <div>🚪 Port: <span id="res-port"></span></div>
-    <div>🔐 TLS: TLS</div>
-    <div>📁 Path: <span id="path"></span></div>
-    <div>🔗 Link:
-      <textarea readonly id="vless-link" class="w-full mt-1 p-2 bg-gray-100 rounded text-xs"></textarea>
-    </div>
-    <div class="text-center">
-      <img id="qrcode" src="" alt="QR Code" class="mx-auto my-2 rounded shadow" />
-      <button onclick="copyConfig()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-black-700">
-        📋 Salin Konfigurasi
-      </button>
-    </div>
-  </div>
-
-  <!-- Script -->
   <script>
     async function generateVLESS() {
       const ipPort = document.getElementById('ipPort').value.trim();
@@ -57,13 +68,11 @@
       }
 
       const [ip, port] = ipPort.split(':');
-
       const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
       const path = `/Club-Gratis/${ip}-${port}`;
-      const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
 
       try {
-        const res = await fetch(url);
+        const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
         const data = await res.json();
 
         if (!data.message || !data.message.includes('ACTIVE')) {
@@ -71,32 +80,32 @@
           return;
         }
 
-        const remarks = `${data.country} ${data.flag} [${data.isp}]`;
-        const ping = `${data.delay}`;
-        const link = `vless://${uuid}@${bug}:443?type=ws&encryption=none&security=tls&host=${bug}.${domain}&path=${path}#${encodeURIComponent(remarks)}`;
+        const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
 
-        // Tampilkan hasil
-        document.getElementById('remarks').textContent = remarks;
-        document.getElementById('ping').textContent = ping;
-        document.getElementById('res-domain').textContent = domain;
-        document.getElementById('res-bug').textContent = bug;
-        document.getElementById('res-port').textContent = port;
-        document.getElementById('path').textContent = path;
-        document.getElementById('vless-link').value = link;
-        document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link)}`;
+        const linkTLS = `vless://${uuid}@${bug}:443?encryption=none&security=tls&type=ws&host=${domain}&path=${path}#${remarks}`;
+        const linkNonTLS = `vless://${uuid}@${bug}:80?encryption=none&security=none&type=ws&host=${domain}&path=${path}#${remarks}`;
+
+        document.getElementById('vless-tls').value = linkTLS;
+        document.getElementById('vless-nontls').value = linkNonTLS;
+        document.getElementById('qr-tls').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(linkTLS)}`;
+        document.getElementById('qr-nontls').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(linkNonTLS)}`;
+
         resultBox.classList.remove('hidden');
-
       } catch (err) {
         alert('Gagal mengambil data proxy.');
-        console.error(err);
       }
     }
 
-    function copyConfig() {
-      const link = document.getElementById('vless-link');
-      link.select();
-      document.execCommand('copy');
-      alert('Konfigurasi berhasil disalin!');
+    function copyAll() {
+      const tls = document.getElementById('vless-tls');
+      const nontls = document.getElementById('vless-nontls');
+      const temp = document.createElement('textarea');
+      temp.value = tls.value + "\n" + nontls.value;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+      alert("Semua konfigurasi VLESS disalin!");
     }
   </script>
 </body>
