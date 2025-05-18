@@ -149,9 +149,9 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const ping = `${data.delay}`;
-        const asn = `AS${data.asn}`;
-        const bughost = `${bug}.${domain}`;
+        const ping = `${data.delay || '-'}`;
+        const asn = `AS${data.asn || '-'}`;
+        const host = `${bug}.${domain}`;
         const linkObject = {
           v: "2",
           ps: remarks,
@@ -161,10 +161,10 @@
           aid: "0",
           net: "ws",
           type: "none",
-          host: bughost,
+          host: host,
           path: path,
           tls: "tls",
-          sni: bughost,
+          sni: host,
           alpn: "",
           scy: "zero"
          };
@@ -175,7 +175,7 @@
         document.getElementById('asn').textContent = asn;
         document.getElementById('ping').textContent = ping;
         document.getElementById('uuid').textContent = uuid;
-        document.getElementById('bughost').textContent = bughost;
+        document.getElementById('bughost').textContent = host;
         document.getElementById('res-domain').textContent = domain;
         document.getElementById('res-bug').textContent = bug;
         document.getElementById('res-port').textContent = port;
