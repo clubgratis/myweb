@@ -44,12 +44,12 @@
 
   <div id="result" class="hidden">
     <h3>Information Account:</h3>
-    <p><strong>🌐 Remark:</strong> <span id="remarks" class="font-semibold"></span></p>
-    <p><strong>🟢 Ping:</stong> <span id="ping"></span></p>
-    <p><strong>📡 Domain:</strong> <span id="res-domain"></span></p>
-    <p><strong>🐞 SNI/Bug:</strong> <span id="res-bug"></span></p>
-    <p><strong>🆔 UUID:</strong> <span id="uuid"></span></p>
-    <p><strong>🚪 Path:</strong> <span id="path"></span></p>
+    <div><strong>🌐 Remark:</strong> <span id="remarks"></span></div>
+    <div><strong>🟢 Ping:</stong> <span id="ping"></span></p>
+    <div><strong>📡 Domain:</strong> <span id="res-domain"></span></div>
+    <div><strong>🐞 SNI/Bug:</strong> <span id="res-bug"></span></div>
+    <div><strong>🆔 UUID:</strong> <span id="uuid"></span></div>
+    <div><strong>🚪 Path:</strong> <span id="path"></span></div>
     <h3>Shadowsocks TLS:</h3>
     <textarea id="ss-link-tls" readonly></textarea>
     <div class="qr">
@@ -99,7 +99,7 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const ping = '${data.delay || '-'}';
+        const ping = '${data.delay}';
         const method = 'none';
         const host= `${bug}.${domain}`;
 
