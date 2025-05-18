@@ -44,13 +44,13 @@
     <textarea id="vless-tls" readonly></textarea>
     <div class="qr"><img id="qr-tls" src="" alt="QR Code TLS"></div>
     
-    <button onclick="copyConfig(vless-tls)">Salin Konfigurasi TLS</button>
+    <button onclick="copyConfig('vless-tls')">Salin Konfigurasi TLS</button>
 
     <p><strong>Akun Non-TLS (80)</strong></p>
     <textarea id="vless-nontls" readonly></textarea>
     <div class="qr"><img id="qr-nontls" src="" alt="QR Code Non-TLS"></div>
 
-    <button onclick="copyConfig(vless-nontls)">Salin Konfigurasi NonTLS</button>
+    <button onclick="copyConfig('vless-nontls')">Salin Konfigurasi NonTLS</button>
   </div>
 
   <footer>
@@ -100,11 +100,15 @@
     }
 
     function copyConfig(id) {
-      const TLS = document.getElementById('vless-tls');
-      const NonTLS = document.getElementById('vless-nontls');
-      link.select();
-      document.execCommand('copy');
-      alert('Konfigurasi berhasil disalin!');
+      const tls = document.getElementById('vless-tls');
+      const nontls = document.getElementById('vless-nontls');
+      const temp = document.createElement('textarea');
+      temp.value = tls.value + "\n" + nontls.value;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+      alert("Konfigurasi disalin!");
     }
   </script>
 </body>
