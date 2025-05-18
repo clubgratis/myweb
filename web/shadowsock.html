@@ -90,10 +90,10 @@
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
         const method = 'none';
-        const userInfo= `btoa(`${method}:${uuid}`)}`;
+        const host= `${bug}.${domain}`;
 
-        const ssLinkTLS = `ss://${userInfo}@${bug}:443?path=${path}&security=tls&host=${domain}&type=ws&sni=${domain}#${encodeURIComponent(remarks)}`;
-        const ssLinkNonTLS = `ss://${userInfo}@${bug}:80?path=${path}&security=none&type=ws&host=${domain}#${encodeURIComponent(remarks)}`;
+        const ssLinkTLS = `ss://${btoa(`${method}:${uuid}`)}@${bug}:443?path=${path}&security=tls&host=${host}&type=ws&sni=${host}#${encodeURIComponent(remarks)}`;
+        const ssLinkNonTLS = `ss://${btoa(`${method}:${uuid}`)}@${bug}:80?path=${path}&security=none&type=ws&host=${host}#${encodeURIComponent(remarks)}`;
 
         document.getElementById('remarks-tls').textContent = remarks;
         document.getElementById('ss-link-tls').value = ssLinkTLS;
