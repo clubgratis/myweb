@@ -76,9 +76,10 @@
       const [ip, port] = ipPort.split(':');
       const password = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
       const path = `/Club-Gratis/${ip}-${port}`;
+      const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
 
       try {
-        const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
+        const res = await fetch(url);
         const data = await res.json();
 
         if (!data.message || !data.message.includes('ACTIVE')) {
