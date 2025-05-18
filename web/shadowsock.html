@@ -3,31 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Generate Akun Shadowsocks</title>
+  <title>Akun Shadowsocks Dual</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; background: #f9f9f9; }
-    input, select, button { display: block; width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    body { font-family: sans-serif; padding: 20px; background: #f0f0f0; max-width: 600px; margin: auto; }
+    input, select, button { width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
     button { background: #007bff; color: white; cursor: pointer; }
     button:hover { background: #0056b3; }
-    .hidden { display: none; }
-    .result-box { margin-top: 20px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .result-box { background: #fff; padding: 15px; border-radius: 10px; margin-top: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     .qr { text-align: center; margin-top: 10px; }
-    textarea { width: 100%; height: 80px; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+    textarea { width: 100%; height: 80px; border-radius: 8px; margin-bottom: 10px; padding: 10px; }
     .logo { position: absolute; top: 10px; right: 10px; border-radius: 50%; width: 50px; height: 50px; object-fit: cover; }
-    footer { text-align: center; margin-top: 30px; font-size: 14px; color: #555; }
+    footer { text-align: center; margin-top: 30px; color: #555; font-size: 14px; }
   </style>
 </head>
 <body>
 
-  <img src="/logo.jpg" alt="Logo" class="logo">
-  
-  <h2>Generate Shadowsocks</h2>
+  <img src="/logo.jpg" class="logo" alt="Logo">
+
+  <h2>Generate Akun Shadowsocks</h2>
 
   <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443" />
   <select id="domain">
     <option value="">-- Pilih Domain --</option>
-    <option value="example.com">example.com</option>
     <option value="akungratisan.xyz">akungratisan.xyz</option>
+    <option value="example.com">example.com</option>
   </select>
   <select id="bug">
     <option value="">-- Pilih Bug Wildcard --</option>
@@ -39,82 +38,76 @@
 
   <div id="result" class="hidden">
     <div class="result-box">
-      <h3>Akun Shadowsocks TLS (Port 443)</h3>
+      <h3>Akun Shadowsocks TLS (443)</h3>
       <p><strong>Remarks:</strong> <span id="remarks443"></span></p>
       <textarea id="link443" readonly></textarea>
-      <div class="qr"><img id="qr443" src="" alt="QR Shadowsocks TLS"></div>
+      <div class="qr"><img id="qr443" src="" alt="QR TLS"></div>
       <button onclick="copyText('link443')">Salin Config TLS</button>
     </div>
 
     <div class="result-box">
-      <h3>Akun Shadowsocks Non-TLS (Port 80)</h3>
+      <h3>Akun Shadowsocks Non-TLS (80)</h3>
       <p><strong>Remarks:</strong> <span id="remarks80"></span></p>
       <textarea id="link80" readonly></textarea>
-      <div class="qr"><img id="qr80" src="" alt="QR Shadowsocks Non-TLS"></div>
+      <div class="qr"><img id="qr80" src="" alt="QR Non-TLS"></div>
       <button onclick="copyText('link80')">Salin Config Non-TLS</button>
     </div>
   </div>
 
   <footer>
-    © 2025 • Kontak Grup Telegram: @akun_gratisan_id
+    © 2025 • Grup Telegram: @akun_gratisan_id
   </footer>
 
   <script>
     async function generateSS() {
-      const ipPort = document.getElementById('ipPort').value.trim();
-      const domain = document.getElementById('domain').value.trim();
-      const bug = document.getElementById('bug').value.trim();
-      const result = document.getElementById('result');
+      const ipPort = document.getElementById("ipPort").value.trim();
+      const domain = document.getElementById("domain").value.trim();
+      const bug = document.getElementById("bug").value.trim();
+      const result = document.getElementById("result");
 
-      if (!ipPort || !domain || !bug || !ipPort.includes(':')) {
-        alert('Isi semua field dengan benar.');
+      if (!ipPort.includes(":") || !domain || !bug) {
+        alert("Lengkapi semua input.");
         return;
       }
 
-      const [ip, port] = ipPort.split(':');
-      const method = 'aes-128-gcm';
-      const password = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
+      const [ip, port] = ipPort.split(":");
+      const method = "aes-128-gcm";
+      const password = "aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1";
       const path = `/Club-Gratis/${ip}-${port}`;
 
       try {
         const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
         const data = await res.json();
 
-        if (!data.message || !data.message.includes('ACTIVE')) {
-          alert('Proxy tidak aktif!');
+        if (!data.message.includes("ACTIVE")) {
+          alert("Proxy tidak aktif!");
           return;
         }
 
-        const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
+        const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'ISP'}]`;
 
-        const base443 = `${method}:${password}@${bug}:443`;
-        const plugin443 = `plugin=xray-plugin;path=${path};host=${domain};tls`;
-        const ss443 = `ss://${btoa(base443)}?${plugin443}#${encodeURIComponent(remarks)}`;
+        const ss443 = `ss://${btoa(`${method}:${password}@${bug}:443`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
+        const ss80  = `ss://${btoa(`${method}:${password}@${bug}:80`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
 
-        const base80 = `${method}:${password}@${bug}:80`;
-        const plugin80 = `plugin=xray-plugin;path=${path};host=${domain}`;
-        const ss80 = `ss://${btoa(base80)}?${plugin80}#${encodeURIComponent(remarks)}`;
+        document.getElementById("remarks443").textContent = remarks;
+        document.getElementById("link443").value = ss443;
+        document.getElementById("qr443").src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ss443)}`;
 
-        document.getElementById('remarks443').textContent = remarks;
-        document.getElementById('link443').value = ss443;
-        document.getElementById('qr443').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ss443)}`;
+        document.getElementById("remarks80").textContent = remarks;
+        document.getElementById("link80").value = ss80;
+        document.getElementById("qr80").src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ss80)}`;
 
-        document.getElementById('remarks80').textContent = remarks;
-        document.getElementById('link80').value = ss80;
-        document.getElementById('qr80').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ss80)}`;
-
-        result.classList.remove('hidden');
-      } catch (err) {
-        console.error('Gagal mengambil data proxy:', err);
-        alert('Gagal memuat data proxy.');
+        result.classList.remove("hidden");
+      } catch (e) {
+        console.error(e);
+        alert("Gagal cek proxy.");
       }
     }
 
     function copyText(id) {
       const el = document.getElementById(id);
       el.select();
-      el.setSelectionRange(0, 99999);
-      document.execCommand('copy');
+      document.execCommand("copy");
       alert("Konfigurasi disalin!");
     }
   </script>
