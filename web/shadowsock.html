@@ -43,9 +43,7 @@
       <textarea id="link443" readonly></textarea>
       <div class="qr"><img id="qr443" src="" alt="QR TLS"></div>
       <button onclick="copyText('link443')">Salin Config TLS</button>
-    </div>
-
-    <div class="result-box">
+    
       <h3>Akun Shadowsocks Non-TLS (80)</h3>
       <p><strong>Remarks:</strong> <span id="remarks80"></span></p>
       <textarea id="link80" readonly></textarea>
@@ -85,9 +83,10 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'ISP'}]`;
+        const userInfo = btoa(`${method}:${password}`);
 
-        const ss443 = `ss://${btoa(`${method}:${password}@${bug}:443`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
-        const ss80  = `ss://${btoa(`${method}:${password}@${bug}:80`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
+        const ss443 = `ss://${userInfo}@${bug}:443`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
+        const ss80  = `ss://${userInfo}@${bug}:80`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
 
         document.getElementById("remarks443").textContent = remarks;
         document.getElementById("link443").value = ss443;
