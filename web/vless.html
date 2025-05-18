@@ -19,7 +19,7 @@
 </head>
 <body>
   <header>
-    <img src="https://via.placeholder.com/40" alt="Logo" />
+    <img src="logo.jpg" alt="Logo" class="logo" />
     <h2>Generate Akun VLESS</h2>
   </header>
 
@@ -43,12 +43,14 @@
     <p><strong>Akun TLS (443)</strong></p>
     <textarea id="vless-tls" readonly></textarea>
     <div class="qr"><img id="qr-tls" src="" alt="QR Code TLS"></div>
+    
+    <button onclick="copyConfig(vless-tls)">Salin Konfigurasi TLS</button>
 
     <p><strong>Akun Non-TLS (80)</strong></p>
     <textarea id="vless-nontls" readonly></textarea>
     <div class="qr"><img id="qr-nontls" src="" alt="QR Code Non-TLS"></div>
 
-    <button onclick="copyAll()">Salin Semua Konfigurasi</button>
+    <button onclick="copyConfig(vless-nontls)">Salin Konfigurasi NonTLS</button>
   </div>
 
   <footer>
@@ -81,9 +83,10 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
+        const host = `${bug}.${domain}`;
 
-        const linkTLS = `vless://${uuid}@${bug}:443?encryption=none&security=tls&type=ws&host=${domain}&path=${path}#${remarks}`;
-        const linkNonTLS = `vless://${uuid}@${bug}:80?encryption=none&security=none&type=ws&host=${domain}&path=${path}#${remarks}`;
+        const linkTLS = `vless://${uuid}@${bug}:443?encryption=none&security=tls&type=ws&host=${host}&path=${path}#${remarks}`;
+        const linkNonTLS = `vless://${uuid}@${bug}:80?encryption=none&security=none&type=ws&host=${host}&path=${path}#${remarks}`;
 
         document.getElementById('vless-tls').value = linkTLS;
         document.getElementById('vless-nontls').value = linkNonTLS;
@@ -96,16 +99,12 @@
       }
     }
 
-    function copyAll() {
-      const tls = document.getElementById('vless-tls');
-      const nontls = document.getElementById('vless-nontls');
-      const temp = document.createElement('textarea');
-      temp.value = tls.value + "\n" + nontls.value;
-      document.body.appendChild(temp);
-      temp.select();
+    function copyConfig(id) {
+      const link = document.getElementById(id);
+      link.select();
+      link.setSelectionRange(0, 99999);
       document.execCommand("copy");
-      document.body.removeChild(temp);
-      alert("Semua konfigurasi VLESS disalin!");
+      alert("Konfigurasi disalin!");
     }
   </script>
 </body>
