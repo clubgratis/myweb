@@ -149,8 +149,8 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const ping = `${data.delay || '-'}`;
-        const asn = `AS${data.asn || '-'}`;
+        const ping = `${data.delay}`;
+        const asn = `AS${data.asn};
         const bughost = `${bug}.${domain}`;
         const linkObject = {
           v: "2",
