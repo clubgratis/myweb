@@ -91,14 +91,15 @@
       try {
         const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
         const data = await res.json();
-
+        console.log('✅ Data Proxy:', data);
+        
         if (!data.message || !data.message.includes('ACTIVE')) {
           alert('Proxy tidak aktif!');
           return;
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const ping = '${data.delay || 'Unknown'}';
+        const ping = '${data.delay || '-'}';
         const method = 'none';
         const host= `${bug}.${domain}`;
 
