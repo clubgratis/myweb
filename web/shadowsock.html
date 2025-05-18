@@ -72,7 +72,7 @@
       const bug = document.getElementById('bug').value.trim();
       const [ip, port] = ipPort.split(':');
       const uuid = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
-      const path = `/gratis/${ip}-${port}`;
+      const path = `/Club-Gratis/${ip}-${port}`;
 
       if (!ip || !port || !domain || !bug) {
         alert('Isi semua field dengan benar.');
@@ -90,9 +90,10 @@
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
         const method = 'none';
+        const userInfo= `btoa(`${method}:${uuid}`)}`;
 
-        const ssLinkTLS = `ss://${btoa(`${method}:${uuid}`)}@${bug}:443?plugin=obfs-local;obfs=websocket;obfs-host=${domain};obfs-uri=${path}&tls=1#${encodeURIComponent(remarks)}`;
-        const ssLinkNonTLS = `ss://${btoa(`${method}:${uuid}`)}@${bug}:80?plugin=obfs-local;obfs=websocket;obfs-host=${domain};obfs-uri=${path}&tls=0#${encodeURIComponent(remarks)}`;
+        const ssLinkTLS = `ss://${userInfo}@${bug}:443?path=${path}&security=tls&host=${domain}&type=ws&sni=${domain}#${encodeURIComponent(remarks)}`;
+        const ssLinkNonTLS = `ss://${userInfo}@${bug}:80?path=${path}&security=none&type=ws&host=${domain}#${encodeURIComponent(remarks)}`;
 
         document.getElementById('remarks-tls').textContent = remarks;
         document.getElementById('ss-link-tls').value = ssLinkTLS;
