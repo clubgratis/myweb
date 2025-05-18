@@ -172,11 +172,13 @@
         const vmessLink = "vmess://" + toBase64Unicode(JSON.stringify(linkObject));
         
         document.getElementById('remarks').textContent = remarks;
+        document.getElementById('asn').textContent = asn;
         document.getElementById('ping').textContent = ping;
+        document.getElementById('bughost').textContent = bughost;
         document.getElementById('res-domain').textContent = domain;
         document.getElementById('res-bug').textContent = bug;
         document.getElementById('res-port').textContent = port;
-        document.getElementaddById('path').textContent = path;
+        document.getElementById('path').textContent = path;
         document.getElementById('vmess-link').value = vmessLink;
         document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(vmessLink)}`;
         resultBox.classList.remove('hidden');
