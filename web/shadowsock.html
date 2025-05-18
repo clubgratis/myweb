@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Akun Shadowsocks Dual</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Akun Shadowsocks</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f0f0f0; max-width: 600px; margin: auto; }
-    input, select, button { width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
-    button { background: #007bff; color: white; cursor: pointer; }
-    button:hover { background: #0056b3; }
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; max-width: 600px; margin: auto; }
+    input, select, button { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #ccc; }
+    button { background: #28a745; color: white; cursor: pointer; }
+    button:hover { background: #218838; }
     .result-box { background: #fff; padding: 15px; border-radius: 10px; margin-top: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     .qr { text-align: center; margin-top: 10px; }
-    textarea { width: 100%; height: 80px; border-radius: 8px; margin-bottom: 10px; padding: 10px; }
+    textarea { width: 100%; height: 80px; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
     .logo { position: absolute; top: 10px; right: 10px; border-radius: 50%; width: 50px; height: 50px; object-fit: cover; }
-    footer { text-align: center; margin-top: 30px; color: #555; font-size: 14px; }
+    footer { text-align: center; margin-top: 30px; color: #777; font-size: 14px; }
   </style>
 </head>
 <body>
 
   <img src="/logo.jpg" class="logo" alt="Logo">
 
-  <h2>Generate Akun Shadowsocks</h2>
+  <h2>Generate Akun Shadowsocks (ws + method: none)</h2>
 
-  <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443" />
+  <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443">
   <select id="domain">
     <option value="">-- Pilih Domain --</option>
     <option value="akungratisan.xyz">akungratisan.xyz</option>
@@ -38,19 +38,18 @@
 
   <div id="result" class="hidden">
     <div class="result-box">
-      <h3>Akun Shadowsocks TLS (443)</h3>
+      <h3>Shadowsocks TLS (443)</h3>
       <p><strong>Remarks:</strong> <span id="remarks443"></span></p>
       <textarea id="link443" readonly></textarea>
       <div class="qr"><img id="qr443" src="" alt="QR TLS"></div>
-      
       <button onclick="copyText('link443')">Salin Config TLS</button>
-      
+    </div>
+
     <div class="result-box">
-      <h3>Akun Shadowsocks Non-TLS (80)</h3>
+      <h3>Shadowsocks Non-TLS (80)</h3>
       <p><strong>Remarks:</strong> <span id="remarks80"></span></p>
       <textarea id="link80" readonly></textarea>
       <div class="qr"><img id="qr80" src="" alt="QR Non-TLS"></div>
-      
       <button onclick="copyText('link80')">Salin Config Non-TLS</button>
     </div>
   </div>
@@ -86,10 +85,9 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'ISP'}]`;
-        const userInfo = btoa(`${method}:${password}`);
 
-        const ss443 = `ss://${userInfo}@${bug}:443`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
-        const ss80  = `ss://${userInfo}@${bug}:80`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
+        const ss443 = `ss://${btoa(`${method}:${password}@${bug}:443`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
+        const ss80  = `ss://${btoa(`${method}:${password}@${bug}:80`)}/?path=${path}&host=${domain}&type=ws#${encodeURIComponent(remarks)}`;
 
         document.getElementById("remarks443").textContent = remarks;
         document.getElementById("link443").value = ss443;
