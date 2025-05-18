@@ -1,55 +1,72 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Buat Akun Trojan</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Generate Akun Trojan</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; background: #f9f9f9; }
+    input, select, button { display: block; width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    button { background: #28a745; color: white; cursor: pointer; }
+    button:hover { background: #1e7e34; }
+    .hidden { display: none; }
+    .result-box { margin-top: 20px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .qr { text-align: center; margin-top: 10px; }
+    textarea { width: 100%; height: 80px; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+    .logo { position: absolute; top: 10px; right: 10px; border-radius: 50%; width: 50px; height: 50px; object-fit: cover; }
+    footer { text-align: center; margin-top: 30px; font-size: 14px; color: #555; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body>
 
-  <!-- Header -->
-  <div class="bg-red-600 text-white text-center py-4 text-xl font-semibold">
-    ✅ TROJAN Created
-  </div>
+  <img src="https://i.ibb.co/0G1nW3P/logo.jpg" alt="Logo" class="logo">
 
-  <!-- Form Input -->
-  <div class="max-w-md mx-auto mt-6 p-4 bg-white rounded shadow space-y-4">
-    <input id="ipPort" type="text" placeholder="Masukkan IP:Port (contoh: 104.26.14.14:443)" class="w-full border p-2 rounded" />
-    <input id="domain" type="text" placeholder="Domain (contoh: bug.cloudflare.com)" class="w-full border p-2 rounded" />
-    <input id="bug" type="text" placeholder="Bug Wildcard (contoh: cdn.cloudflare.net)" class="w-full border p-2 rounded" />
-    <button onclick="generateTrojan()" class="w-full bg-red-600 text-white p-2 rounded hover:bg-black-700">
-      🔧 Buat Akun
-    </button>
-  </div>
+  <h2>Generate Akun Trojan</h2>
 
-  <!-- Hasil -->
-  <div id="result" class="max-w-md mx-auto mt-4 p-4 bg-white rounded shadow hidden space-y-3 text-sm">
-    <div>🌐 Remark: <span id="remarks" class="font-semibold" style="color:red;"></span></div>
-    <div>🟢 Ping: <span id="ping" class="font-semibold" style="color:green;"></span></div>
-    <div>📡 Domain: <span id="res-domain"></span></div>
-    <div>🐞 SNI/Bug: <span id="res-bug"></span></div>
-    <div>🔑 Password: <span id="uuid">aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1</span></div>
-    <div>🚪 Port: <span id="res-port"></span></div>
-    <div>🔐 TLS: TLS</div>
-    <div>📁 Path: <span id="path"></span></div>
-    <div>🔗 Link:
-      <textarea readonly id="trojan-link" class="w-full mt-1 p-2 bg-gray-100 rounded text-xs"></textarea>
+  <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443" />
+  <select id="domain">
+    <option value="">-- Pilih Domain --</option>
+    <option value="example.com">example.com</option>
+    <option value="akungratisan.xyz">akungratisan.xyz</option>
+  </select>
+  <select id="bug">
+    <option value="">-- Pilih Bug Wildcard --</option>
+    <option value="bug.com">bug.com</option>
+    <option value="*.bughost.com">*.bughost.com</option>
+  </select>
+
+  <button onclick="generateTrojan()">Buat Akun Trojan</button>
+
+  <div id="result" class="hidden">
+    <div class="result-box">
+      <h3>Akun Trojan TLS (Port 443)</h3>
+      <p><strong>Remarks:</strong> <span id="remarks443"></span></p>
+      <p><strong>Link:</strong></p>
+      <textarea id="link443" readonly></textarea>
+      <div class="qr"><img id="qr443" src="" alt="QR Trojan TLS"></div>
+      <button onclick="copyText('link443')">Salin Config TLS</button>
     </div>
-    <div class="text-center">
-      <img id="qrcode" src="" alt="QR Code" class="mx-auto my-2 rounded shadow" />
-      <button onclick="copyConfig()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-black-700">
-        📋 Salin Konfigurasi
-      </button>
+
+    <div class="result-box">
+      <h3>Akun Trojan Non-TLS (Port 80)</h3>
+      <p><strong>Remarks:</strong> <span id="remarks80"></span></p>
+      <p><strong>Link:</strong></p>
+      <textarea id="link80" readonly></textarea>
+      <div class="qr"><img id="qr80" src="" alt="QR Trojan Non-TLS"></div>
+      <button onclick="copyText('link80')">Salin Config Non-TLS</button>
     </div>
   </div>
 
-  <!-- Script -->
+  <footer>
+    © 2025 • Kontak Grup Telegram: @akun_gratisan_id
+  </footer>
+
   <script>
     async function generateTrojan() {
       const ipPort = document.getElementById('ipPort').value.trim();
       const domain = document.getElementById('domain').value.trim();
       const bug = document.getElementById('bug').value.trim();
-      const resultBox = document.getElementById('result');
+      const result = document.getElementById('result');
 
       if (!ipPort || !domain || !bug || !ipPort.includes(':')) {
         alert('Isi semua field dengan benar.');
@@ -59,10 +76,9 @@
       const [ip, port] = ipPort.split(':');
       const password = 'aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1';
       const path = `/Club-Gratis/${ip}-${port}`;
-      const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
 
       try {
-        const res = await fetch(url);
+        const res = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
         const data = await res.json();
 
         if (!data.message || !data.message.includes('ACTIVE')) {
@@ -70,33 +86,37 @@
           return;
         }
 
-        const remarks = `${data.country} ${data.flag} [${data.isp}]`;
-        const ping = `${data.delay}`;
-        const link = `trojan://${password}@${bug}:443?security=tls&type=ws&host=${bug}.${domain}&path=${path}#${encodeURIComponent(remarks)}`;
+        const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
 
-        // Tampilkan hasil
-        document.getElementById('remarks').textContent = remarks;
-        document.getElementById('ping').textContent = ping;
-        document.getElementById('res-domain').textContent = domain;
-        document.getElementById('res-bug').textContent = bug;
-        document.getElementById('res-port').textContent = port;
-        document.getElementById('path').textContent = path;
-        document.getElementById('trojan-link').value = link;
-        document.getElementById('qrcode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link)}`;
-        resultBox.classList.remove('hidden');
+        // TLS
+        const link443 = `trojan://${password}@${bug}:443?peer=${domain}&sni=${domain}&type=ws&host=${domain}&path=${path}#${encodeURIComponent(remarks)}`;
 
+        // Non-TLS
+        const link80 = `trojan://${password}@${bug}:80?type=ws&host=${domain}&path=${path}#${encodeURIComponent(remarks)}`;
+
+        document.getElementById('remarks443').textContent = remarks;
+        document.getElementById('link443').value = link443;
+        document.getElementById('qr443').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link443)}`;
+
+        document.getElementById('remarks80').textContent = remarks;
+        document.getElementById('link80').value = link80;
+        document.getElementById('qr80').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link80)}`;
+
+        result.classList.remove('hidden');
       } catch (err) {
-        alert('Gagal mengambil data proxy.');
-        console.error(err);
+        console.error('Gagal mengambil data proxy:', err);
+        alert('Gagal memuat data proxy.');
       }
     }
 
-    function copyConfig() {
-      const link = document.getElementById('trojan-link');
-      link.select();
+    function copyText(id) {
+      const el = document.getElementById(id);
+      el.select();
+      el.setSelectionRange(0, 99999);
       document.execCommand('copy');
-      alert('Konfigurasi berhasil disalin!');
+      alert("Konfigurasi disalin!");
     }
   </script>
+
 </body>
 </html>
