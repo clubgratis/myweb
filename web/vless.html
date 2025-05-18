@@ -100,11 +100,11 @@
     }
 
     function copyConfig(id) {
-      const tls = document.getElementById('vless-tls');
-      const nontls = document.getElementById('vless-nontls');
-      document.execCommand("copy");
-      document.body.removeChild(temp);
-      alert("Konfigurasi disalin!");
+      const TLS = document.getElementById('vless-tls');
+      const NonTLS = document.getElementById('vless-nontls');
+      link.select();
+      document.execCommand('copy');
+      alert('Konfigurasi berhasil disalin!');
     }
   </script>
 </body>
