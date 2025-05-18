@@ -148,7 +148,6 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const ping = `${data.delay || 'Unknown'}`;
         const host = `${bug}.${domain}`;
         
         const linkObject = {
@@ -171,9 +170,8 @@
         const vmessLink = "vmess://" + toBase64Unicode(JSON.stringify(linkObject));
         
         document.getElementById('remarks').textContent = remarks;
-        document.getElementById('ping').textContent = ping;
         document.getElementById('uuid').textContent = uuid;
-        document.getElementById('bughost').textContent = host;
+        document.getElementById('host').textContent = host;
         document.getElementById('res-domain').textContent = domain;
         document.getElementById('res-bug').textContent = bug;
         document.getElementById('res-port').textContent = port;
