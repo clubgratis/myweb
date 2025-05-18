@@ -103,7 +103,6 @@
       const tls = document.getElementById('vless-tls');
       const nontls = document.getElementById('vless-nontls');
       const temp = document.createElement('textarea');
-      temp.value = tls.value + "\n" + nontls.value;
       document.body.appendChild(temp);
       temp.select();
       document.execCommand("copy");
