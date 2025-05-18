@@ -70,8 +70,23 @@
   </div>
 
   <footer>
-    <p>Kontak Grup Telegram: @akun_gratisan</p>
-    <p>&copy; 2025 Akun Gratisan</p>
+    <div class="col-6 text-end">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="http://t.me/Mr_Kings_Official" class="text-muted"><i class="fa-solid fa-phone-slash">‌</i>
+                                        Contact</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-muted">copyright</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-muted">© 2015-2024</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-muted">Term</a>
+                                </li>
+                            </ul>
+                        </div>
   </footer>
 
   <script>
@@ -98,7 +113,7 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
-        const ping = '${data.delay}';
+        const ping = '${data.delay || 'Unknown'}';
         const method = 'none';
         const host= `${bug}.${domain}`;
 
@@ -107,8 +122,8 @@
 
         document.getElementById('remarks').textContent = remarks;
         document.getElementById('ping').textContent = ping;
-        document.getElementById('domain').textContent = domain;
-        document.getElementById('bug').textContent = bug;
+        document.getElementById('res-domain').textContent = domain;
+        document.getElementById('res-bug').textContent = bug;
         document.getElementById('uuid').textContent = uuid;
         document.getElementById('path').textContent = path;
         document.getElementById('ss-link-tls').value = ssLinkTLS;
