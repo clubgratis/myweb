@@ -42,12 +42,15 @@
       <p><strong>Remarks:</strong> <span id="remarks443"></span></p>
       <textarea id="link443" readonly></textarea>
       <div class="qr"><img id="qr443" src="" alt="QR TLS"></div>
+      
       <button onclick="copyText('link443')">Salin Config TLS</button>
-    
+      
+    <div class="result-box">
       <h3>Akun Shadowsocks Non-TLS (80)</h3>
       <p><strong>Remarks:</strong> <span id="remarks80"></span></p>
       <textarea id="link80" readonly></textarea>
       <div class="qr"><img id="qr80" src="" alt="QR Non-TLS"></div>
+      
       <button onclick="copyText('link80')">Salin Config Non-TLS</button>
     </div>
   </div>
@@ -69,7 +72,7 @@
       }
 
       const [ip, port] = ipPort.split(":");
-      const method = "aes-128-gcm";
+      const method = "none";
       const password = "aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1";
       const path = `/Club-Gratis/${ip}-${port}`;
 
