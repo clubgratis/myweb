@@ -96,9 +96,8 @@
       hasil.innerHTML = "Memeriksa...";
 
       try {
-        const res = await fetch("https://ndeso.my.id/cek-proxy?proxy=" + proxy);
+        const res = await fetch("https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}");
         const data = await res.json();
-
         if (data.status === "ok") {
           hasil.innerHTML = `
             <strong>Status:</strong> Aktif ✅<br>
