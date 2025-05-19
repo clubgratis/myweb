@@ -122,8 +122,8 @@
             <strong>⚡ Longitude:</strong> ${data.longitude}<br>
             <strong>🗺️ Maps:</strong>
           `;
-          if (proxyResult.latitude && proxyResult.longitude) {
-    responseText += `👉 🌍 [Google Maps](https://www.google.com/maps?q=${proxyResult.latitude},${proxyResult.longitude})`;
+          if (data.latitude && data.longitude) {
+    responseText += `👉 🌍 [Google Maps](https://www.google.com/maps?q=${data.latitude},${data.longitude})`;
   }
         } else {
           hasil.innerHTML = `<strong>Status:</strong> Mati ❌`;
