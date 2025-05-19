@@ -84,7 +84,7 @@
   </main>
 
   <footer>
-    &copy; 2025 Club Gratis | Hubungi kami di Grup Telegram @ClubGratisID
+    &copy; 2025 Club Gratis | Hubungi kami di Grup Telegram <a href="https://t.me/club_gratis">@Club_Gratis</a>
   </footer>
 
   <script>
@@ -107,21 +107,21 @@
 
         if (data.message || data.message.includes('ACTIVE')) {
           hasil.innerHTML = `
-            <strong>Status:</strong> ${data.message}<br>
-            <strong>ProxyIP:</strong> ${data.proxyip ? '✅ Yes' : '❌ No'}<br>
-            <strong>Negara:</strong> ${data.country} ${data.flag}<br>
-            <strong>ISP:</strong> ${data.isp}<br>
-            <strong>IP:</strong> ${data.ip}<br>
-            <strong>Port:</strong> ${data.port}<br>
-            <strong>Latency:</strong> <a class="font-semibold" style="color:green;">${data.delay}</a><br>
-            <strong>ASN:</strong> AS${data.asn}<br>
-            <strong>Kota:</strong> ${data.city}<br>
-            <strong>Zona Waktu:</strong> ${data.timezone}<br>
-            <strong>Colo:</strong> ${data.colo}<br>
-            <strong>Latitude:</strong> ${data.latitude}<br>
-            <strong>Longitude:</strong> ${data.longitude}<br>
-            <strong>Warp:</strong> ${data.warp ? '✅ Yes': '❌ No'}<br>
-            <strong>Maps:</strong> <a href="https://www.google.com/maps?q=${data.latitude},${data.longitude}" target="_blank" class="text-blue-600 underline">Lihat Lokasi</a>
+            <strong>🛰️ Status:</strong> ${data.message}<br>
+            <strong>🔑 ProxyIP:</strong> ${data.proxyip ? '✅ Yes' : '❌ No'}<br>
+            <strong>🌍 Negara:</strong> ${data.country} ${data.flag}<br>
+            <strong>🗼 ISP:</strong> ${data.isp}<br>
+            <strong>🌐 IP:</strong> ${data.ip}<br>
+            <strong>🚪 Port:</strong> ${data.port}<br>
+            <strong>🟢 Latency:</strong> <a class="font-semibold" style="color:green;">${data.delay}</a><br>
+            <strong>📡 ASN:</strong> AS${data.asn}<br>
+            <strong>🏙️ Kota:</strong> ${data.city}<br>
+            <strong>📈 Zona Waktu:</strong> ${data.timezone}<br>
+            <strong>⚙️ Colo:</strong> ${data.colo}<br>
+            <strong>📍 Latitude:</strong> ${data.latitude}<br>
+            <strong>⚡ Longitude:</strong> ${data.longitude}<br>
+            <strong>📁 Warp:</strong> ${data.warp ? '✅ Yes': '❌ No'}<br>
+            <strong>🗺️ Maps:</strong> <a href="https://www.google.com/maps?q=${data.latitude},${data.longitude}" target="_blank" class="text-blue-600 underline">Lihat Lokasi</a>
           `;
         } else {
           hasil.innerHTML = `<strong>Status:</strong> Mati ❌`;
