@@ -19,49 +19,59 @@
 </head>
 <body>
 
-  <img src="logo.jpg" alt="Logo" class="logo">
+  <img src="/logo.jpg" alt="Logo" class="logo">
   <h2>Generate Akun VMess</h2>
 
   <input type="text" id="ipPort" placeholder="IP:Port contoh 1.1.1.1:443" />
   <select id="domain">
     <option value="">-- Pilih Domain --</option>
-    <option value="example.com">example.com</option>
-    <option value="akungratisan.xyz">akungratisan.xyz</option>
+    <option value="clubgratis.xyz">clubgratis.xyz</option>
+    <option value="akungratis.dpdns.org">akungratis.dpdns.org</option>
+    <option value="wilcardcf.biz.id">wilcardcf.biz.id</option>
+    <option value="mrkings.xyz">mrkings.xyz</option>
   </select>
   <select id="bug">
     <option value="">-- Pilih Bug Wildcard --</option>
-    <option value="bug.com">bug.com</option>
-    <option value="*.bughost.com">*.bughost.com</option>
+    <option value="ava.game.naver.com">ava.game.naver.com</option>
+    <option value="graph.instagram.com">graph.instagram.com</option>
+    <option value="quiz.int.vidio.com">quiz.int.vidio.com</option>
+    <option value="investor.fb.com">investor.fb.com</option>
+    <option value="support.zoom.us">support.zoom.us</option>
+    <option value="zaintest.vuclip.com">zaintest.vuclip.com</option>
   </select>
 
   <button onclick="generateVMess()">Buat Akun VMess</button>
 
   <div id="result" class="hidden">
-    <h3>Informasi Account VMess:</h3>
-    <p><strong>Remarks:</strong> <span id="remarks"></span></p>
-    <p><strong>Domain:</strong> <span id="res-domain"></span></p>
-    <p><strong>Bug:</strong> <span id="res-bug"></span></p>
-    <p><strong>Path:</strong> <span id="path"></span></p>
-    <h3>VMess TLS (Port 443)</h3>
+   <div class="result-box">
+    <h3>Information Account:</h3>
+    <p><strong>🌐 Remark:</strong> <span id="remarks"class="font-semibold"></span></p>
+    <p><strong>🟢 Ping:</strong> <span id="ping" class="font-semibold" style="color:green;"></span></p>
+    <p><strong>📡 Domain:</strong> <span id="res-domain"></span></p>
+    <p><strong>🐞 SNI/Bug:</strong> <span id="res-bug"></span></p>
+    <p><strong>🆔 UUID:</strong> <span id="uuid"></span></p>
+    <p><strong>🚪 Path:</strong> <span id="path"></span></p>
+     
+    <p><strong>VMess TLS:</strong></p>
     <textarea id="vmess-link" readonly></textarea>
     <div class="qr">
-      <img id="qrcode" src="" alt="QR Code VMess TLS">
-    </div>
-    <button onclick="copyConfig('vmess-link')">Salin Konfigurasi TLS</button>
-
-    <hr style="margin: 30px 0;">
-
-    <h3>VMess non-TLS (Port 80)</h3>
+      <img id="qrcode" src="" alt="QR Code VMess TLS"></div>
+     
+    <button onclick="copyConfig('vmess-link')">Salin Config TLS</button>
+   </div>
+    <div class="result-box">
+    <p><strong>VMess NonTLS:</strong></p>
     <textarea id="vmess-link-nontls" readonly></textarea>
     <div class="qr">
-      <img id="qrcode-nontls" src="" alt="QR Code VMess Non-TLS">
-    </div>
-    <button onclick="copyConfig('vmess-link-nontls')">Salin Konfigurasi non-TLS</button>
+      <img id="qrcode-nontls" src="" alt="QR Code VMess Non-TLS"></div>
+    
+    <button onclick="copyConfig('vmess-link-nontls')">Salin Config non-TLS</button>
+   </div>
   </div>
-
+  
   <footer>
-    <p>Kontak Grup Telegram: Club Gratis</p>
-    <p>&copy; 2025 Akun Gratisan</p>
+    <p><a href="http://t.me/club_gratis">Contact</a></p>
+    <p>&copy; 2025 Club Gratis</p>
   </footer>
 
   <script>
@@ -93,6 +103,7 @@
         }
 
         const remarks = `${data.country || 'Unknown'} ${data.flag || ''} [${data.isp || 'Unknown ISP'}]`;
+        const ping = `${data.delay}`;
         const host = `${bug}.${domain}`;
 
         // TLS
@@ -131,8 +142,10 @@
         const vmessNonTLS = "vmess://" + toBase64Unicode(JSON.stringify(linkNonTLS));
 
         document.getElementById('remarks').textContent = remarks;
+        document.getElementById('ping').textContent = ping;
         document.getElementById('res-domain').textContent = domain;
         document.getElementById('res-bug').textContent = bug;
+        document.getElementById('uuid').textContent = uuid;
         document.getElementById('path').textContent = path;
         document.getElementById('vmess-link').value = vmessTLS;
         document.getElementById('vmess-link-nontls').value = vmessNonTLS;
