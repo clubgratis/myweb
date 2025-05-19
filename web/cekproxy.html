@@ -106,9 +106,6 @@
         const data = await response.json();
 
         if (!data.message || !data.message.includes('ACTIVE')) {
-          alert('Proxy tidak aktif!');
-          return;
-        } {
           hasil.innerHTML = `
             <strong>Status:</strong> Aktif ✅<br>
             <strong>ProxyIP:</strong> ${data.proxyip ? '✅ Yes' : '❌ No'}<br>
