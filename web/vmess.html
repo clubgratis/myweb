@@ -43,31 +43,29 @@
   <button onclick="generateVMess()">Buat Akun VMess</button>
 
   <div id="result" class="hidden">
-   <div class="result-box">
-    <h3>Information Account:</h3>
+    <div class="result-box">
+      <h3>Information Account:</h3>
     <p><strong>🌐 Remark:</strong> <span id="remarks"class="font-semibold"></span></p>
     <p><strong>🟢 Ping:</strong> <span id="ping" class="font-semibold" style="color:green;"></span></p>
     <p><strong>📡 Domain:</strong> <span id="res-domain"></span></p>
     <p><strong>🐞 SNI/Bug:</strong> <span id="res-bug"></span></p>
-    <p><strong>🆔 UUID:</strong> <span id="uuid"></span></p>
+    <p><strong>🆔 Password:</strong> <span id="password"></span></p>
     <p><strong>🚪 Path:</strong> <span id="path"></span></p>
-     
-    <p><strong>VMess TLS:</strong></p>
-    <textarea id="vmess-link" readonly></textarea>
-    <div class="qr">
-      <img id="qrcode" src="" alt="QR Code VMess TLS"></div>
-     
-    <button onclick="copyConfig('vmess-link')">Salin Config TLS</button>
-   </div>
-    
-   <div class="result-box">
-    <p><strong>VMess NonTLS:</strong></p>
-    <textarea id="vmess-link-nontls" readonly></textarea>
-    <div class="qr">
-      <img id="qrcode-nontls" src="" alt="QR Code VMess Non-TLS"></div>
-    
-    <button onclick="copyConfig('vmess-link-nontls')">Salin Config non-TLS</button>
-   </div>
+      
+      <p><strong>VMess TLS:</strong></p>
+      <textarea id="vmess-link" readonly></textarea>
+      <div class="qr"><img id="qrcode" src="" alt="QR Code VMess TLS"></div>
+      
+      <button onclick="copyText('vmess-link')">Salin Config TLS</button>
+    </div>
+
+    <div class="result-box">
+      <p><strong>VMess NonTLS:</strong></p>
+      <textarea id="vmess-link-nontls" readonly></textarea>
+      <div class="qr"><img id="qrcode-nontls" src="" alt="QR Code VMess Non-TLS"></div>
+      
+      <button onclick="copyText('vmess-link-nontls')">Salin Config Non-TLS</button>
+    </div>
   </div>
   
   <footer>
