@@ -107,7 +107,7 @@
 
         if (data.message || data.message.includes('ACTIVE')) {
           hasil.innerHTML = `
-            <strong>Status:</strong> Aktif ✅<br>
+            <strong>Status:</strong> ${data.message}<br>
             <strong>ProxyIP:</strong> ${data.proxyip ? '✅ Yes' : '❌ No'}<br>
             <strong>Negara:</strong> ${data.country} ${data.flag}<br>
             <strong>ISP:</strong> ${data.isp}<br>
@@ -118,7 +118,8 @@
             <strong>Kota:</strong> ${data.city}<br>
             <strong>Zona Waktu:</strong> ${data.timezone}<br>
             <strong>Colo:</strong> ${data.colo}<br>
-            <strong>Maps:</strong> ${data.latitude} ${data.longitude}
+            <strong>Latitude:</strong> ${data.latitude}<br>
+            <strong>Longitude:</strong> ${data.longitude}
           `;
         } else {
           hasil.innerHTML = `<strong>Status:</strong> Mati ❌`;
