@@ -79,44 +79,68 @@
     <button onclick="cekProxy()">Cek Sekarang</button>
     <div id="hasil" class="result" style="display:none;"></div>
   </main>
+  <!-- Hasil -->
+  <div id="hasil" class="max-w-md mx-auto mt-6 p-4 bg-white rounded shadow hidden space-y-4 text-xl">
+    <div>🟢 <strong>Status:</strong> <span id="status"></span></div>
+    <div>🔑 <strong>ProxyIP:</strong> <span id="proxyip"></span></div>
+    <div>🌐 <strong>IP:</strong> <span id="ip"></span></div>
+    <div>📡 <strong>Port:</strong> <span id="port"></span></div>
+    <div>🌍 <strong>Negara:</strong> <span id="country"></span> <span id="flag"></span></div>
+    <div>🏙️ <strong>Kota:</strong> <span id="city"></span></div>
+    <div>🏢 <strong>ISP:</strong> <span id="isp"></span></div>
+    <div>📶 <strong>ASN:</strong> <span id="asn"></span></div>
+    <div>🏛️ <strong>Organization:</strong> <span id="org"></span></div>
+    <div>📍 <strong>Lokasi:</strong> <span id="lat"></span>, <span id="lon"></span></div>
+    <div>🗺️ <strong>Maps:</strong> <a id="maps" href="#" target="_blank" class="text-blue-600 underline">Lihat Lokasi</a></div>
+    <div>⚡ <strong>Latensi:</strong> <span id="latency" class="font-semibold" style="color:green;"></span></div>
+    <div>🕓 <strong>Timezone:</strong> <span id="timezone"></span></div>
+    <div>🛠️ <strong>Port Terbuka:</strong> <span id="open_ports"></span></div>
+    <div>⚙️ <strong>Protocols:</strong> <span id="protocols"></span></div>
+  </div>
   <footer>
     &copy; 2025 Club Gratis | Hubungi kami di Grup Telegram <a href="https://t.me/club_gratis">@Club_Gratis</a>
   </footer>
 
   <script>
     async function cekProxy() {
-      const proxy = document.getElementById("proxyInput").value.trim();
-      if (!proxy.includes(":")) {
-        alert("Format proxy harus IP:Port");
+      const input = document.getElementById('ipPort').value.trim();
+      const hasil = document.getElementById('hasil');
+      if (!input || !input.includes(':')) {
+        alert('Masukkan IP dan Port dengan format benar.');
         return;
       }
 
-      const hasil = document.getElementById("hasil");
-      hasil.style.display = "none";
-      hasil.innerHTML = "Memeriksa...";
+      const [ip, port] = input.split(':');
+      const url = `https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`;
 
       try {
-        const res = await fetch("https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}");
+        const res = await fetch(url);
         const data = await res.json();
-        if (data.status === "ok") {
-          hasil.innerHTML = `
-            <strong>Status:</strong> Aktif ✅<br>
-            <strong>Negara:</strong> ${data.country} ${data.flag}<br>
-            <strong>ISP:</strong> ${data.isp}<br>
-            <strong>IP:</strong> ${data.ip}<br>
-            <strong>Port:</strong> ${data.port}<br>
-            <strong>Latensi:</strong> ${data.ping} ms<br>
-            <strong>ASN:</strong> ${data.asn}<br>
-            <strong>Region:</strong> ${data.region}<br>
-            <strong>City:</strong> ${data.city}
-          `;
-        } else {
-          hasil.innerHTML = "<strong>Status:</strong> Mati ❌";
-        }
-        hasil.style.display = "block";
+      
+        // Tampilkan data lengkap
+        document.getElementById('status').textContent = data.message?.includes('ACTIVE') ? "✅ ACTIVE" : "❌ DEAD";
+        document.getElementById('status').className = data.message ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
+        document.getElementById('proxyip').textContent = data.proxyip ? '✅ Yes' : '❌ No';
+        document.getElementById('ip').textContent = ip;
+        document.getElementById('port').textContent = port;
+        document.getElementById('country').textContent = data.country || '-';
+        document.getElementById('flag').textContent = data.flag || '';
+        document.getElementById('city').textContent = data.city || '-';
+        document.getElementById('isp').textContent = data.isp || '-';
+        document.getElementById('asn').textContent = data.asn || '-';
+        document.getElementById('org').textContent = data.org || '-';
+        document.getElementById('lat').textContent = data.latitude || '-';
+        document.getElementById('lon').textContent = data.longitude || '-';
+        document.getElementById('maps').href = `https://www.google.com/maps?q=${data.latitude},${data.longitude}`;
+        document.getElementById('latency').textContent = data.delay || '-';
+        document.getElementById('timezone').textContent = data.timezone || '-';
+        document.getElementById('open_ports').textContent = (data.open_ports || []).join(', ') || '-';
+        document.getElementById('protocols').textContent = (data.protocols || []).join(', ') || '-';
+
+        hasil.classList.remove('hidden');
       } catch (err) {
-        hasil.innerHTML = "Gagal memeriksa proxy.";
-        hasil.style.display = "block";
+        alert('Gagal mengambil data dari API.');
+        console.error(err);
       }
     }
   </script>
