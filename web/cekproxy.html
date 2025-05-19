@@ -120,11 +120,8 @@
             <strong>⚙️ Colo:</strong> ${data.colo}<br>
             <strong>📍 Latitude:</strong> ${data.latitude}<br>
             <strong>⚡ Longitude:</strong> ${data.longitude}<br>
-            <strong>🗺️ Maps:</strong>
+            <strong>🗺️ Maps:</strong> 👉 🌍 [Google Maps](https://www.google.com/maps?q=${data.latitude},${dara.longitude})`
           `;
-          if (data.latitude && data.longitude) {
-    responseText += `👉 🌍 [Google Maps](https://www.google.com/maps?q=${data.latitude},${data.longitude})`;
-  }
         } else {
           hasil.innerHTML = `<strong>Status:</strong> Mati ❌`;
         }
