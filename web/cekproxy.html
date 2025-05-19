@@ -113,7 +113,7 @@
             <strong>ISP:</strong> ${data.isp}<br>
             <strong>IP:</strong> ${data.ip}<br>
             <strong>Port:</strong> ${data.port}<br>
-            <strong>Latency:</strong> ${data.delay}<br>
+            <strong>Latency:</strong> ${data.delay} <a class="font-semibold" style="color:green;"></a><br>
             <strong>ASN:</strong> AS${data.asn}<br>
             <strong>Kota:</strong> ${data.city}<br>
             <strong>Zona Waktu:</strong> ${data.timezone}<br>
@@ -121,8 +121,7 @@
             <strong>Latitude:</strong> ${data.latitude}<br>
             <strong>Longitude:</strong> ${data.longitude}<br>
             <strong>Warp:</strong> ${data.warp ? '✅ Yes': '❌ No'}<br>
-            <strong>Hosting:</strong> ${data.hosting ? 'Yes' : 'No'}<br>
-            <strong>Organisasi:</strong> ${data.org}
+            <strong>Maps:</strong> <a href="https://www.google.com/maps?q=${data.latitude},${data.longitude}" target="_blank" class="text-blue-600 underline">Lihat Lokasi</a>
           `;
         } else {
           hasil.innerHTML = `<strong>Status:</strong> Mati ❌`;
