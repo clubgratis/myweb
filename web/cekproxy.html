@@ -120,8 +120,8 @@
             <strong>Colo:</strong> ${data.colo}<br>
             <strong>Latitude:</strong> ${data.latitude}<br>
             <strong>Longitude:</strong> ${data.longitude}<br>
-            <strong>Warp:</strong> ${data.warp}<br>
-            <strong>Protocol:</strong>
+            <strong>Warp:</strong> ${data.warp ? '✅ Yes': '❌ No'}<br>
+            <strong>Protocol:</strong> ${data.protocol}
           `;
         } else {
           hasil.innerHTML = `<strong>Status:</strong> Mati ❌`;
