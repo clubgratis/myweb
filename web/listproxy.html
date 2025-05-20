@@ -140,7 +140,7 @@
             const response = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
             const result = await response.json();
             // Menggunakan hasil dari API untuk menentukan status aktif/mati
-            return result.message && result.message.trim().includes('ACTIVE');
+            return result.message && (result.message.includes('ACTIVE') || result.message.trim() === 'ACTIVE ✅');
         }
 
         async function renderProxies() {
