@@ -119,8 +119,10 @@
             Array.from(proxyDivs).forEach((proxyDiv, index) => {
                 const statusSpan = proxyDiv.querySelector('.status');
                 if (results[index]) {
-                    statusSpan.className = 'status bg-green-500 inline-block w-3 h-3 rounded-full ml-2'; // Jika aktif
+                    console.log(`Proxy ${paginatedProxies[index].isp} is ACTIVE`);
+                    statusSpan.className = 'status bg-green-500 pulse inline-block w-3 h-3 rounded-full ml-2'; // Jika aktif, tambahkan animasi
                 } else {
+                    console.log(`Proxy ${paginatedProxies[index].isp} is DEAD`);
                     statusSpan.className = 'status bg-red-500 inline-block w-3 h-3 rounded-full ml-2'; // Jika tidak aktif
                 }
             });
