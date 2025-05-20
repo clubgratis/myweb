@@ -45,14 +45,14 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            margin-right: 10px;
+            margin-left: 10px;
         }
 
-        .green {
+        .active {
             background-color: green;
         }
 
-        .red {
+        .dead {
             background-color: red;
         }
 
@@ -127,7 +127,7 @@
             const text = await response.text();
             const lines = text.split('\n');
             lines.forEach(line => {
-                const [ip, port, country, isp] = line.split(','); // Memisahkan IP, port, negara, dan ISP
+                const [ip, port, country, isp] = line.split(',');  // Memisahkan IP, port, negara, dan ISP
                 if (ip && port && country && isp) {
                     proxyList.push({ ip, port, country, isp });
                 }
@@ -141,11 +141,15 @@
                 const response = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
                 const result = await response.json();
                 
-                // Debugging
-                console.log(result); // Tampilkan respons API di konsol
+                // Debugging output
+                console.log(result); // Tampilkan hasil API di konsol
                 
                 // Memeriksa status aktif menggunakan message
-                return result.message && (result.message.includes('ACTIVE') || result.message.includes('ACTIVO'));
+                if (result.message && (result.message.includes('ACTIVE') || result.message.includes('ACTIVO'))) {
+                    return true; // Proxy aktif 
+                } else {
+                    return false; // Proxy tidak aktif
+                }
             } catch (error) {
                 console.error(`Failed to check proxy ${ip}:${port} - ${error}`);
                 return false; // Anggap proxy tidak aktif jika gagal
@@ -161,12 +165,12 @@
             const paginatedProxies = proxyList.slice(start, end);
 
             for (const proxy of paginatedProxies) {
-                const isActive = await checkProxy(proxy.ip, proxy.port);
+                const isActive = await checkProxy(proxy.ip, proxy.port); // Cek status
                 const item = document.createElement('div');
                 item.className = 'proxy-item';
                 item.innerHTML = `
                     <div class="proxy-header">
-                        <span>${proxy.isp} <span class="status ${isActive ? 'green' : 'red'}"></span></span>
+                        <span>${proxy.isp} <span class="status ${isActive ? 'active' : 'dead'}"></span></span>
                     </div>
                     <div class="proxy-details">
                         Country: ${proxy.country} <br />
@@ -181,9 +185,9 @@
         function renderPagination() {
             const pageNumbersDiv = document.getElementById('page-numbers');
             const totalPages = Math.ceil(proxyList.length / itemsPerPage);
-            pageNumbersDiv.innerHTML = '';
+            pageNumbersDiv.innerHTML = ''; // Kosongkan sebelumnya
 
-            // Button sebelumnya
+            // Previous Button
             if (currentPage > 1) {
                 pageNumbersDiv.appendChild(createPageButton(currentPage - 1, 'Prev'));
             }
@@ -215,7 +219,7 @@
                 pageNumbersDiv.appendChild(createPageButton(totalPages, totalPages));
             }
 
-            // Button berikutnya
+            // Next Button
             if (currentPage < totalPages) {
                 pageNumbersDiv.appendChild(createPageButton(currentPage + 1, 'Next'));
             }
