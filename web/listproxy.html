@@ -127,7 +127,7 @@
             const text = await response.text();
             const lines = text.split('\n');
             lines.forEach(line => {
-                const [ip, port, country, isp] = line.split(',');  // Memisahkan IP, port, negara, dan ISP
+                const [ip, port, country, isp] = line.split(','); 
                 if (ip && port && country && isp) {
                     proxyList.push({ ip, port, country, isp });
                 }
@@ -145,23 +145,26 @@
                 console.log(result);
                 
                 // Memeriksa status aktif menggunakan message
-                return result.message && result.message.includes('ACTIVE');
+                if (result.message && result.message.includes('ACTIVE')) {
+                    return true; // Proxy aktif
+                }
             } catch (error) {
-                console.error(`Error checking proxy ${ip}:${port} - ${error}`);
-                return false; // Jika terjadi kesalahan, anggap proxy tidak aktif
+                console.error(`Failed to check proxy ${ip}:${port} - ${error}`);
+                return false; // Kontrol bahwa terjadi kesalahan
             }
+            return false; // Default ke tidak aktif jika tidak ditemukan
         }
 
         async function renderProxies() {
             const proxyDiv = document.getElementById('proxy-list');
-            proxyDiv.innerHTML = ''; // Kosongkan sebelumnya
+            proxyDiv.innerHTML = '';
 
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const paginatedProxies = proxyList.slice(start, end);
 
             for (const proxy of paginatedProxies) {
-                const isActive = await checkProxy(proxy.ip, proxy.port); // Cek status
+                const isActive = await checkProxy(proxy.ip, proxy.port);
                 const item = document.createElement('div');
                 item.className = 'proxy-item';
                 item.innerHTML = `
@@ -181,7 +184,7 @@
         function renderPagination() {
             const pageNumbersDiv = document.getElementById('page-numbers');
             const totalPages = Math.ceil(proxyList.length / itemsPerPage);
-            pageNumbersDiv.innerHTML = ''; // Kosongkan sebelumnya
+            pageNumbersDiv.innerHTML = '';
 
             // Previous Button
             if (currentPage > 1) {
@@ -240,4 +243,5 @@
         fetchProxies();
     </script>
 </body>
+
 </html>
