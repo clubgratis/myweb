@@ -137,10 +137,18 @@
         }
 
         async function checkProxy(ip, port) {
-            const response = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
-            const result = await response.json();
-            // Memeriksa status aktif menggunakan message
-            return result.message && (result.message.includes('ACTIVE'));
+            try {
+                const response = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
+                const result = await response.json();
+                // Memeriksa status aktif menggunakan message
+                if (result.message && result.message.includes('ACTIVE')) {
+                    return true; // Proxy aktif
+                }
+            } catch (error) {
+                console.error(`Failed to check proxy ${ip}:${port} - ${error}`);
+                return false; // Anggap proxy tidak aktif jika gagal
+            }
+            return false; // Jika tidak aktif atau respons tidak sesuai
         }
 
         async function renderProxies() {
