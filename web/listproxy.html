@@ -5,115 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proxy List Checker</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1E1E2F;
-            color: white;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .proxy-item {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 15px;
-            border: 1px solid #444;
-            margin: 8px 0;
-            background: linear-gradient(135deg, #2c2c3e, #25252d);
-            border-radius: 8px;
-        }
-
-        .proxy-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .status {
-            width: 20px;
-            height: 20px;
-            margin-left: 10px;
-        }
-
-        .active {
-            content: '🟢'; /* Simbol hijau untuk aktif */
-        }
-
-        .dead {
-            content: '🔴'; /* Simbol merah untuk tidak aktif */
-        }
-
-        .proxy-details {
-            margin-top: 5px;
-            color: #ccc;
-        }
-
-        button {
-            background: linear-gradient(135deg, #6e00ff, #9e4ed0);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background: linear-gradient(135deg, #9e4ed0, #6e00ff);
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .pagination button,
-        .pagination span {
-            background: transparent;
-            color: white;
-            border: 1px solid #444;
-            border-radius: 5px;
-            padding: 8px 12px;
-            margin: 0 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        .pagination button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .ellipsis {
-            margin: 0 5px;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="container">
-        <h1>Proxy List Checker</h1>
-        <div id="proxy-list">
-            <!-- Proxy items will be added here -->
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto p-5">
+        <h1 class="text-3xl text-center mb-5">Proxy List Checker</h1>
+        <div id="proxy-list" class="space-y-4">
+            <!-- Daftar proxy akan ditambahkan di sini -->
         </div>
-        <div class="pagination" id="pagination">
-            <button onclick="prevPage()">Prev</button>
-            <span id="page-numbers"></span>
-            <button onclick="nextPage()">Next</button>
+        <div class="flex justify-center mt-5">
+            <button onclick="prevPage()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l">
+                Prev
+            </button>
+            <span id="page-numbers" class="mx-2"></span>
+            <button onclick="nextPage()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r">
+                Next
+            </button>
         </div>
     </div>
     <script>
@@ -141,7 +49,7 @@
                 const result = await response.json();
 
                 console.log(result); // Tampilkan hasil API di konsol
-
+                
                 // Memeriksa status aktif menggunakan message
                 return result.message && (result.message.includes('ACTIVE') || result.message.includes('ACTIVO'));
             } catch (error) {
@@ -161,16 +69,19 @@
             for (const proxy of paginatedProxies) {
                 const isActive = await checkProxy(proxy.ip, proxy.port); // Cek status aktif
                 const item = document.createElement('div');
-                item.className = 'proxy-item';
+                item.className = "bg-gray-800 border border-gray-700 p-4 rounded-lg flex justify-between items-center";
                 item.innerHTML = `
-                    <div class="proxy-header">
-                        <span>${proxy.isp} <span class="status ${isActive ? 'active' : 'dead'}">${isActive ? '🟢' : '🔴'}</span></span>
+                    <div class="flex items-center">
+                        <span class="font-bold">${proxy.isp}</span>
+                        <span class="status ${isActive ? 'bg-green-500' : 'bg-red-500'} inline-block w-4 h-4 rounded-full ml-2"></span>
                     </div>
-                    <div class="proxy-details">
-                        Country: ${proxy.country} <br />
+                    <div class="text-gray-400">
+                        ${proxy.country} <br />
                         IP: ${proxy.ip}:${proxy.port}
                     </div>
-                    <button onclick="createConnection('${proxy.ip}', '${proxy.port}')">Create</button>
+                    <button onclick="createConnection('${proxy.ip}', '${proxy.port}')" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
+                        Create
+                    </button>
                 `;
                 proxyDiv.appendChild(item);
             }
@@ -193,7 +104,7 @@
                 pageNumbersDiv.appendChild(createPageButton(1, '1'));
                 if (startIndex > 2) {
                     const ellipsis = document.createElement('span');
-                    ellipsis.className = 'ellipsis';
+                    ellipsis.className = 'mx-2';
                     ellipsis.textContent = '...';
                     pageNumbersDiv.appendChild(ellipsis);
                 }
@@ -206,7 +117,7 @@
             if (endIndex < totalPages) {
                 if (endIndex < totalPages - 1) {
                     const ellipsis = document.createElement('span');
-                    ellipsis.className = 'ellipsis';
+                    ellipsis.className = 'mx-2';
                     ellipsis.textContent = '...';
                     pageNumbersDiv.appendChild(ellipsis);
                 }
@@ -221,6 +132,7 @@
 
         function createPageButton(page, text) {
             const button = document.createElement('button');
+            button.className = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"; // Styling button
             button.textContent = text;
             button.onclick = () => {
                 currentPage = page;
