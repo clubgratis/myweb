@@ -20,7 +20,7 @@
         }
 
         .pulse {
-            animation: pulse 1s infinite; /* Menambahkan animasi pulse */
+            animation: pulse 1s infinite; /* Menambahkan efek pulse */
         }
     </style>
 </head>
@@ -28,9 +28,7 @@
 <body class="bg-gray-900 text-white">
     <div class="container mx-auto p-5">
         <h1 class="text-3xl text-center mb-5">Proxy List Checker</h1>
-        <div id="proxy-list" class="space-y-4">
-            <!-- Daftar proxy akan ditambahkan di sini -->
-        </div>
+        <div id="proxy-list" class="space-y-4"></div>
         <div class="flex justify-center mt-5">
             <button onclick="prevPage()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l">
                 Prev
@@ -52,14 +50,13 @@
             const text = await response.text();
             const lines = text.split('\n');
             lines.forEach(line => {
-                const [ip, port, country, isp] = line.split(','); // Memisahkan IP, port, negara, dan ISP
+                const [ip, port, country, isp] = line.split(',');
                 if (ip && port && country && isp) {
                     proxyList.push({ ip, port, country, isp });
                 }
             });
-            renderProxies();
+            renderProxies(); // Render proxy terlebih dahulu
             renderPagination();
-            await checkAllProxies(); // Periksa semua proxy setelah merender
         }
 
         async function checkProxy(ip, port) {
@@ -81,7 +78,7 @@
             const end = start + itemsPerPage;
             const paginatedProxies = proxyList.slice(start, end);
 
-            // Render proxy dengan kotak status default
+            // Render proxy dan langsung periksa statusnya
             paginatedProxies.forEach(proxy => {
                 const item = document.createElement('div');
                 item.className = "bg-gray-800 border border-gray-700 p-4 rounded-lg flex flex-col";
@@ -90,7 +87,7 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <span class="font-bold">${proxy.isp}</span>
-                            <span class="status bg-gray-500 inline-block w-4 h-4 rounded-full ml-2"></span>
+                            <span class="status bg-gray-500 inline-block w-4 h-4 rounded-full ml-2"></span> <!-- Status Default -->
                         </div>
                     </div>
                     <div class="text-gray-400">
@@ -102,38 +99,26 @@
                     </button>
                 `;
                 proxyDiv.appendChild(item);
-            });
-        }
 
-        async function checkAllProxies() {
-            const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const paginatedProxies = proxyList.slice(start, end);
-
-            // Buat array dari promises untuk memeriksa semua proxy secara bersamaan
-            const checks = paginatedProxies.map(proxy => checkProxy(proxy.ip, proxy.port));
-            const results = await Promise.all(checks); // Tunggu semua pemeriksaan selesai
-
-            // Perbarui status di UI
-            const proxyDivs = document.getElementById('proxy-list').children;
-            Array.from(proxyDivs).forEach((proxyDiv, index) => {
-                const statusSpan = proxyDiv.querySelector('.status');
-                if (results[index]) {
-                    console.log(`Proxy ${paginatedProxies[index].isp} is ACTIVE`);
-                    statusSpan.className = 'status bg-green-500 pulse inline-block w-3 h-3 rounded-full ml-2'; // Jika aktif, tambahkan animasi
-                } else {
-                    console.log(`Proxy ${paginatedProxies[index].isp} is DEAD`);
-                    statusSpan.className = 'status bg-red-500 inline-block w-3 h-3 rounded-full ml-2'; // Jika tidak aktif
-                }
+                // Cek status proxy
+                checkProxy(proxy.ip, proxy.port).then(isActive => {
+                    const statusSpan = item.querySelector('.status');
+                    if (isActive) {
+                        console.log(`Proxy ${proxy.isp} is ACTIVE`);
+                        statusSpan.className = 'status bg-green-500 pulse inline-block w-4 h-4 rounded-full ml-2'; // Jika aktif
+                    } else {
+                        console.log(`Proxy ${proxy.isp} is DEAD`);
+                        statusSpan.className = 'status bg-red-500 inline-block w-4 h-4 rounded-full ml-2'; // Jika tidak aktif
+                    }
+                });
             });
         }
 
         function renderPagination() {
             const pageNumbersDiv = document.getElementById('page-numbers');
             const totalPages = Math.ceil(proxyList.length / itemsPerPage);
-            pageNumbersDiv.innerHTML = ''; // Kosongkan sebelumnya
+            pageNumbersDiv.innerHTML = '';
 
-            // Previous Button
             if (currentPage > 1) {
                 pageNumbersDiv.appendChild(createPageButton(currentPage - 1, 'Prev'));
             }
@@ -165,7 +150,6 @@
                 pageNumbersDiv.appendChild(createPageButton(totalPages, totalPages));
             }
 
-            // Next Button
             if (currentPage < totalPages) {
                 pageNumbersDiv.appendChild(createPageButton(currentPage + 1, 'Next'));
             }
@@ -173,13 +157,12 @@
 
         function createPageButton(page, text) {
             const button = document.createElement('button');
-            button.className = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"; // Styling button
+            button.className = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded";
             button.textContent = text;
             button.onclick = () => {
                 currentPage = page;
                 renderProxies(); // Render semua proxy untuk halaman itu
                 renderPagination(); // Perbarui pagination
-                checkAllProxies(); // Periksa semua proxy ketika berpindah halaman
             };
             return button;
         }
