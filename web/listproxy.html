@@ -139,8 +139,8 @@
         async function checkProxy(ip, port) {
             const response = await fetch(`https://api-checker.aquamarinelavinia.workers.dev/?ip=${ip}:${port}`);
             const result = await response.json();
-            // Memeriksa apakah message ada dan termasuk 'ACTIVE'
-            return result.message && (result.message.includes('ACTIVE') || result.message === 'ACTIVE');
+            // Menggunakan hasil dari API untuk menentukan status aktif/mati
+            return result.message && result.message.trim().includes('ACTIVE');
         }
 
         async function renderProxies() {
@@ -152,7 +152,7 @@
             const paginatedProxies = proxyList.slice(start, end);
 
             for (const proxy of paginatedProxies) {
-                const isActive = await checkProxy(proxy.ip, proxy.port);
+                const isActive = await checkProxy(proxy.ip, proxy.port); // Cek status
                 const item = document.createElement('div');
                 item.className = 'proxy-item';
                 item.innerHTML = `
@@ -167,8 +167,6 @@
                 `;
                 proxyDiv.appendChild(item);
             }
-
-            document.getElementById('page-number').textContent = currentPage;
         }
 
         function renderPagination() {
@@ -176,16 +174,13 @@
             const totalPages = Math.ceil(proxyList.length / itemsPerPage);
             pageNumbersDiv.innerHTML = ''; // Kosongkan sebelumnya
 
-            const pageButtonCount = 5; // Jumlah tombol halaman yang ditampilkan
-
             // Previous Button
             if (currentPage > 1) {
                 pageNumbersDiv.appendChild(createPageButton(currentPage - 1, 'Prev'));
             }
 
-            // Page Buttons
-            let startIndex = Math.max(1, currentPage - Math.floor(pageButtonCount / 2));
-            let endIndex = Math.min(totalPages, startIndex + pageButtonCount - 1);
+            let startIndex = Math.max(1, currentPage - 2);
+            let endIndex = Math.min(totalPages, startIndex + 4);
 
             if (startIndex > 1) {
                 pageNumbersDiv.appendChild(createPageButton(1, '1'));
