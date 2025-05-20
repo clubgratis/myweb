@@ -22,6 +22,11 @@
         .pulse {
             animation: pulse 1s infinite; /* Menambahkan efek pulse */
         }
+        
+        .active-page {
+            font-weight: bold;
+            color: #F44336; /* Warna merah untuk halaman aktif */
+        }
     </style>
 </head>
 
@@ -30,11 +35,13 @@
         <h1 class="text-3xl text-center mb-5">Proxy List Checker</h1>
         <div id="proxy-list" class="space-y-4"></div>
         <div class="flex justify-center mt-5">
-            <button onclick="prevPage()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l">
+            <!-- Tombol Prev -->
+            <button id="prev-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l" style="display: none;" onclick="prevPage()">
                 Prev
             </button>
             <span id="page-numbers" class="mx-2"></span>
-            <button onclick="nextPage()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r">
+            <!-- Tombol Next -->
+            <button id="next-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r" style="display: none;" onclick="nextPage()">
                 Next
             </button>
         </div>
@@ -58,6 +65,7 @@
             });
             renderProxies(); // Render proxy terlebih dahulu
             renderPagination();
+            updateNavigationButtons(); // Update tombol navigasi setelah render
         }
 
         async function checkProxy(ip, port) {
@@ -129,14 +137,20 @@
             }
         }
 
+        function updateNavigationButtons() {
+            const totalPages = Math.ceil(proxyList.length / itemsPerPage);
+
+            // Tampilkan tombol Prev jika bukan di halaman pertama
+            document.getElementById('prev-button').style.display = currentPage > 1 ? 'block' : 'none';
+            
+            // Tampilkan tombol Next jika bukan di halaman terakhir
+            document.getElementById('next-button').style.display = currentPage < totalPages ? 'block' : 'none';
+        }
+
         function renderPagination() {
             const pageNumbersDiv = document.getElementById('page-numbers');
             const totalPages = Math.ceil(proxyList.length / itemsPerPage);
             pageNumbersDiv.innerHTML = '';
-
-            if (currentPage > 1) {
-                pageNumbersDiv.appendChild(createPageButton(currentPage - 1, 'Prev'));
-            }
 
             let startIndex = Math.max(1, currentPage - 2);
             let endIndex = Math.min(totalPages, startIndex + 4);
@@ -152,7 +166,7 @@
             }
 
             for (let i = startIndex; i <= endIndex; i++) {
-                pageNumbersDiv.appendChild(createPageButton(i, i));
+                pageNumbersDiv.appendChild(createPageButton(i, i, i === currentPage));
             }
 
             if (endIndex < totalPages) {
@@ -164,22 +178,37 @@
                 }
                 pageNumbersDiv.appendChild(createPageButton(totalPages, totalPages));
             }
-
-            if (currentPage < totalPages) {
-                pageNumbersDiv.appendChild(createPageButton(currentPage + 1, 'Next'));
-            }
         }
 
-        function createPageButton(page, text) {
+        function createPageButton(page, text, isActivePage) {
             const button = document.createElement('button');
-            button.className = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded";
+            button.className = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" + (isActivePage ? " active-page" : "");
             button.textContent = text;
             button.onclick = () => {
                 currentPage = page;
                 renderProxies(); // Render semua proxy untuk halaman itu
                 renderPagination(); // Perbarui pagination
+                updateNavigationButtons(); // Perbarui tombol navigasi
             };
             return button;
+        }
+
+        function nextPage() {
+            if (currentPage < Math.ceil(proxyList.length / itemsPerPage)) {
+                currentPage++;
+                renderProxies();
+                renderPagination();
+                updateNavigationButtons();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderProxies();
+                renderPagination();
+                updateNavigationButtons();
+            }
         }
 
         function createConnection(ip, port) {
