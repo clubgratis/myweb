@@ -42,6 +42,7 @@
 
     <script>
         const proxyList = [];
+        const cache = {}; // Objek untuk menyimpan hasil pemeriksaan
         let currentPage = 1;
         const itemsPerPage = 10;
 
@@ -78,11 +79,11 @@
             const end = start + itemsPerPage;
             const paginatedProxies = proxyList.slice(start, end);
 
-            // Render proxy dan langsung periksa statusnya
-            paginatedProxies.forEach(proxy => {
+            // Render proxy dan periksa statusnya dari cache (jika ada)
+            for (const proxy of paginatedProxies) {
                 const item = document.createElement('div');
                 item.className = "bg-gray-800 border border-gray-700 p-4 rounded-lg flex flex-col";
-                
+
                 item.innerHTML = `
                     <div class="flex justify-between items-center">
                         <div>
@@ -100,18 +101,32 @@
                 `;
                 proxyDiv.appendChild(item);
 
-                // Cek status proxy
-                checkProxy(proxy.ip, proxy.port).then(isActive => {
+                // Cek cache untuk status
+                const cacheKey = `${proxy.ip}:${proxy.port}`;
+                if (cache[cacheKey] !== undefined) {
+                    // Status ada di cache, langsung update UI
                     const statusSpan = item.querySelector('.status');
+                    const isActive = cache[cacheKey];
                     if (isActive) {
-                        console.log(`Proxy ${proxy.isp} is ACTIVE`);
                         statusSpan.className = 'status bg-green-500 pulse inline-block w-4 h-4 rounded-full ml-2'; // Jika aktif
                     } else {
-                        console.log(`Proxy ${proxy.isp} is DEAD`);
                         statusSpan.className = 'status bg-red-500 inline-block w-4 h-4 rounded-full ml-2'; // Jika tidak aktif
                     }
-                });
-            });
+                } else {
+                    // Jika tidak ada di cache, lakukan pemeriksaan
+                    checkProxy(proxy.ip, proxy.port).then(isActive => {
+                        const statusSpan = item.querySelector('.status');
+                        cache[cacheKey] = isActive; // Simpan status ke cache
+                        if (isActive) {
+                            console.log(`Proxy ${proxy.isp} is ACTIVE`);
+                            statusSpan.className = 'status bg-green-500 pulse inline-block w-4 h-4 rounded-full ml-2'; // Jika aktif
+                        } else {
+                            console.log(`Proxy ${proxy.isp} is DEAD`);
+                            statusSpan.className = 'status bg-red-500 inline-block w-4 h-4 rounded-full ml-2'; // Jika tidak aktif
+                        }
+                    });
+                }
+            }
         }
 
         function renderPagination() {
