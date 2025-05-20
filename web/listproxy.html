@@ -12,9 +12,11 @@
             0% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.2);
             }
+
             100% {
                 transform: scale(1);
             }
@@ -41,12 +43,27 @@
             0% {
                 background-position: 0% 50%;
             }
+
             50% {
                 background-position: 100% 50%;
             }
+
             100% {
                 background-position: 0% 50%;
             }
+        }
+
+        .search-container {
+            margin-bottom: 15px;
+        }
+
+        .refresh-button {
+            background: linear-gradient(90deg, rgba(255, 0, 150, 1), rgba(0, 204, 255, 1));
+        }
+
+        /* Pastikan ukuran input jelas */
+        input[type="text"] {
+            width: 300px; /* Lebar yang sesuai */
         }
     </style>
 </head>
@@ -59,7 +76,23 @@
             <h1 class="text-4xl gradient-text">CLUB GRATIS</h1>
         </div>
 
-        <h2 class="text-2xl text-center mb-5">Proxy List</h2>
+        <div class="search-container flex mb-5">
+            <input type="text" id="search-input" placeholder="Search by provider or country..." class="border p-2 rounded-l" />
+            <button onclick="searchProxies()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+
+        <div class="flex justify-end mb-5">
+            <button onclick="refreshProxies()" class="refresh-button bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+
+        <div class="flex items-center">
+            <h2 class="text-2xl mb-5 mr-2"><i class="fas fa-list mr-2"></i>Proxy List</h2>
+        </div>
+
         <div id="proxy-list" class="space-y-4"></div>
         <div class="flex justify-center mt-5">
             <!-- Tombol Prev -->
@@ -75,7 +108,8 @@
     </div>
 
     <script>
-        const proxyList = [];
+        let proxyList = [];
+        let filteredProxyList = [];
         const cache = {}; // Objek untuk menyimpan hasil pemeriksaan
         let currentPage = 1;
         const itemsPerPage = 10;
@@ -90,6 +124,7 @@
                     proxyList.push({ ip, port, country, isp });
                 }
             });
+            filteredProxyList = [...proxyList]; // Inisialisasi filtered list
             renderProxies(); // Render proxy terlebih dahulu
             renderPagination();
             updateNavigationButtons(); // Update tombol navigasi setelah render
@@ -112,7 +147,7 @@
 
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
-            const paginatedProxies = proxyList.slice(start, end);
+            const paginatedProxies = filteredProxyList.slice(start, end);
 
             // Render proxy dan periksa statusnya dari cache (jika ada)
             for (const proxy of paginatedProxies) {
@@ -165,7 +200,7 @@
         }
 
         function updateNavigationButtons() {
-            const totalPages = Math.ceil(proxyList.length / itemsPerPage);
+            const totalPages = Math.ceil(filteredProxyList.length / itemsPerPage);
 
             // Tampilkan tombol Prev jika bukan di halaman pertama
             document.getElementById('prev-button').style.display = currentPage > 1 ? 'block' : 'none';
@@ -176,7 +211,7 @@
 
         function renderPagination() {
             const pageNumbersDiv = document.getElementById('page-numbers');
-            const totalPages = Math.ceil(proxyList.length / itemsPerPage);
+            const totalPages = Math.ceil(filteredProxyList.length / itemsPerPage);
             pageNumbersDiv.innerHTML = '';
 
             let startIndex = Math.max(1, currentPage - 2);
@@ -221,7 +256,7 @@
         }
 
         function nextPage() {
-            if (currentPage < Math.ceil(proxyList.length / itemsPerPage)) {
+            if (currentPage < Math.ceil(filteredProxyList.length / itemsPerPage)) {
                 currentPage++;
                 renderProxies();
                 renderPagination();
@@ -236,6 +271,24 @@
                 renderPagination();
                 updateNavigationButtons();
             }
+        }
+
+        function searchProxies() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            filteredProxyList = proxyList.filter(proxy =>
+                proxy.country.toLowerCase().includes(query) ||
+                proxy.isp.toLowerCase().includes(query)
+            );
+            currentPage = 1; // Reset ke halaman 1 setelah pencarian
+            renderProxies();
+            renderPagination();
+            updateNavigationButtons();
+        }
+
+        function refreshProxies() {
+            // Refresh untuk memuat ulang data asal
+            proxyList = [];
+            fetchProxies(); // Panggil kembali fetch untuk mendapatkan data terbaru
         }
 
         function createConnection(ip, port) {
