@@ -48,11 +48,11 @@
             margin-right: 10px;
         }
 
-        .active {
+        .green {
             background-color: green;
         }
 
-        .inactive {
+        .red {
             background-color: red;
         }
 
@@ -127,7 +127,7 @@
             const text = await response.text();
             const lines = text.split('\n');
             lines.forEach(line => {
-                const [ip, port, country, isp] = line.split(',');  // Memisahkan IP, port, negara, dan ISP
+                const [ip, port, country, isp] = line.split(','); // Memisahkan IP, port, negara, dan ISP
                 if (ip && port && country && isp) {
                     proxyList.push({ ip, port, country, isp });
                 }
@@ -142,10 +142,10 @@
                 const result = await response.json();
                 
                 // Debugging
-                console.log(result); // Tampilkan respons API di Console
-
+                console.log(result); // Tampilkan respons API di konsol
+                
                 // Memeriksa status aktif menggunakan message
-                return result.message && result.message.includes('ACTIVE');
+                return result.message && (result.message.includes('ACTIVE') || result.message.includes('ACTIVO'));
             } catch (error) {
                 console.error(`Failed to check proxy ${ip}:${port} - ${error}`);
                 return false; // Anggap proxy tidak aktif jika gagal
@@ -166,7 +166,7 @@
                 item.className = 'proxy-item';
                 item.innerHTML = `
                     <div class="proxy-header">
-                        <span>${proxy.isp} <span class="status ${isActive ? 'active' : 'inactive'}"></span></span>
+                        <span>${proxy.isp} <span class="status ${isActive ? 'green' : 'red'}"></span></span>
                     </div>
                     <div class="proxy-details">
                         Country: ${proxy.country} <br />
@@ -181,9 +181,9 @@
         function renderPagination() {
             const pageNumbersDiv = document.getElementById('page-numbers');
             const totalPages = Math.ceil(proxyList.length / itemsPerPage);
-            pageNumbersDiv.innerHTML = ''; // Kosongkan sebelumnya
+            pageNumbersDiv.innerHTML = '';
 
-            // Previous Button
+            // Button sebelumnya
             if (currentPage > 1) {
                 pageNumbersDiv.appendChild(createPageButton(currentPage - 1, 'Prev'));
             }
@@ -215,7 +215,7 @@
                 pageNumbersDiv.appendChild(createPageButton(totalPages, totalPages));
             }
 
-            // Next Button
+            // Button berikutnya
             if (currentPage < totalPages) {
                 pageNumbersDiv.appendChild(createPageButton(currentPage + 1, 'Next'));
             }
@@ -240,5 +240,4 @@
         fetchProxies();
     </script>
 </body>
-
 </html>
