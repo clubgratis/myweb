@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proxy List Checker</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         @keyframes pulse {
             0% {
@@ -22,17 +23,43 @@
         .pulse {
             animation: pulse 1s infinite; /* Menambahkan efek pulse */
         }
-        
+
         .active-page {
             font-weight: bold;
             color: #F44336; /* Warna merah untuk halaman aktif */
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, rgba(255, 0, 150, 1) 0%, rgba(0, 204, 255, 1) 100%);
+            background-size: 400% 400%; /* Menentukan ukuran latar belakang agar bergerak */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glitter 5s ease infinite; /* Animasi bergerak */
+        }
+
+        @keyframes glitter {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
     </style>
 </head>
 
 <body class="bg-gray-900 text-white">
     <div class="container mx-auto p-5">
-        <h1 class="text-3xl text-center mb-5">Proxy List Checker</h1>
+        <!-- Logo dan Teks Judul -->
+        <div class="flex items-center justify-center mb-5">
+            <i class="fas fa-dove text-5xl mr-2 pulse" style="color: #D3D3D3;"></i>
+            <h1 class="text-4xl gradient-text">CLUB GRATIS</h1>
+        </div>
+
+        <h2 class="text-2xl text-center mb-5">Proxy List</h2>
         <div id="proxy-list" class="space-y-4"></div>
         <div class="flex justify-center mt-5">
             <!-- Tombol Prev -->
