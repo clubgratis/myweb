@@ -176,18 +176,18 @@
                 <select id="server-domain" class="border p-2 rounded mb-2 w-full">
                     <option value="" disabled selected>Select a domain</option>
                     <option value="clubgratis.xyz">clubgratis.xyz</option>
-                    <option value="otherdomain.com">vpn.4reavless.xyz</option>
-                    <option value="example.com">akungratis.dpdns.org</option>
-                    <option value="example.net">mrkings.xyz</option>
+                    <option value="otherdomain.com">otherdomain.com</option>
+                    <option value="example.com">example.com</option>
+                    <option value="example.net">example.net</option>
                 </select>
 
                 <label for="custom-bug" class="block">Custom Bug:</label>
                 <select id="custom-bug" class="border p-2 rounded mb-2 w-full">
                     <option value="">Select a custom bug</option>
-                    <option value="bug.ava.net">ava.game.naver.com</option>
-                    <option value="bug.game.net">graph.instagram.com</option>
-                    <option value="bug.oke.com">graph.facebook.com</option>
-                    <option value="bug.oke.net">zaintest.vuclip.com</option>
+                    <option value="bug.ava.net">bug.ava.net</option>
+                    <option value="bug.game.net">bug.game.net</option>
+                    <option value="bug.oke.com">bug.oke.com</option>
+                    <option value="bug.oke.net">bug.oke.net</option>
                 </select>
 
                 <label for="tls-option" class="block">Select TLS Option:</label>
@@ -493,9 +493,9 @@
             copyToClipboard(trojanLink); // Memanggil fungsi untuk menyalin
         }
 
-      function createShadowsocksConfig(accountType) {
+        function createShadowsocksConfig(accountType) {
     const remarks = document.getElementById('account-name').value; // Nama Akun
-    const uuid = document.getElementById('uuid').value; // UUID
+    const password = document.getElementById('password').value; // Password
     const path = document.getElementById('path').value; // Path
     const bug = document.getElementById('custom-bug').value; // Custom Bug
     const domain = document.getElementById('server-domain').value; // Server Domain
@@ -510,10 +510,10 @@
     // Mengonfigurasi objek berdasarkan TLS atau Non-TLS
     if (tlsOption === "tls") {
         // Shadowsocks TLS
-        shadowsocksLink = `ss://${btoa(`${method}:${uuid}`)}@${bug}:443?path=${path}&security=tls&host=${host}&type=ws&sni=${host}#${encodeURIComponent(remarks)}`;
+        shadowsocksLink = `ss://${btoa(`${method}:${password}`)}@${bug}:443?path=${path}&security=tls&host=${host}&type=ws&sni=${host}#${encodeURIComponent(remarks)}`;
     } else {
         // Shadowsocks Non-TLS
-        shadowsocksLink = `ss://${btoa(`${method}:${uuid}`)}@${bug}:80?path=${path}&security=none&type=ws&host=${host}#${encodeURIComponent(remarks)}`;
+        shadowsocksLink = `ss://${btoa(`${method}:${password}`)}@${bug}:80?path=${path}&security=none&type=ws&host=${host}#${encodeURIComponent(remarks)}`;
     }
 
     // Output objek
