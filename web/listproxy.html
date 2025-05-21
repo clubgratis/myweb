@@ -143,10 +143,11 @@
             <h2 class="text-2xl">Create Account</h2>
             <p id="proxy-status" class="my-4">Status: <span id="status-indicator"></span></p>
             <p class="my-4">Choose Account Type:</p>
-            <button id="vmess-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">VMess</button>
-            <button id="vless-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">VLESS</button>
-            <button id="trojan-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Trojan</button>
-            <button id="shadowsocks-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Shadowsocks</button>
+            <button id="vmess-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="selectAccount('VMess')">VMess</button>
+            <button id="vless-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="selectAccount('VLESS')">VLESS</button>
+            <button id="trojan-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="selectAccount('Trojan')">Trojan</button>
+            <button id="shadowsocks-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="selectAccount('Shadowsocks')">Shadowsocks</button>
+            <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" onclick="closeModal()">Close</button>
 
             <div id="account-form" class="mt-4 hidden">
                 <label for="account-name" class="block">Account Name:</label>
@@ -195,7 +196,6 @@
                 </select>
 
                 <button id="create-account-button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mb-2 rounded">Create Account</button>
-                <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" onclick="closeModal()">Close</button>
             </div>
 
         </div>
@@ -316,15 +316,17 @@
                 document.getElementById(buttonId).onclick = function () {
                     selectedAccountType = buttonId.replace('-button', '').toUpperCase(); // Menyimpan pilihan akun
                     showAccountForm(selectedAccountType, country, isp);
-                    disableAccountButtons(accountButtons);
+                    hideOtherAccountButtons(selectedAccountType);
                 };
             });
         }
 
-        function disableAccountButtons(buttons) {
-            buttons.forEach(buttonId => {
-                document.getElementById(buttonId).disabled = true; // Menonaktifkan semua tombol
-                document.getElementById(buttonId).classList.add('opacity-50', 'cursor-not-allowed'); // Menambahkan gaya untuk menunjukkan menonaktifkan
+        function hideOtherAccountButtons(selectedButtonId) {
+            const accountButtons = ['vmess-button', 'vless-button', 'trojan-button', 'shadowsocks-button'];
+            accountButtons.forEach(buttonId => {
+                if (buttonId !== selectedButtonId.toLowerCase() + '-button') {
+                    document.getElementById(buttonId).style.display = 'none'; // Sembunyikan tombol lainnya
+                }
             });
         }
 
@@ -376,10 +378,13 @@
             modal.style.display = 'none';
             document.body.classList.remove('modal-open'); // Menghapus kelas untuk memfasilitasi scrolling kembali
             document.getElementById('account-form').classList.add('hidden'); // Sembunyikan form saat modal ditutup
+            resetAccountButtons(); // Kembalikan tombol akun ke keadaan semula
+        }
+
+        function resetAccountButtons() {
             const accountButtons = ['vmess-button', 'vless-button', 'trojan-button', 'shadowsocks-button'];
             accountButtons.forEach(buttonId => {
-                document.getElementById(buttonId).disabled = false; // Mengaktifkan kembali semua tombol saat ditutup
-                document.getElementById(buttonId).classList.remove('opacity-50', 'cursor-not-allowed'); // Menghapus gaya menonaktifkan
+                document.getElementById(buttonId).style.display = 'inline-block'; // Tampilkan kembali semua tombol
             });
         }
 
