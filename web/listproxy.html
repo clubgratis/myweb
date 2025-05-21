@@ -12,9 +12,11 @@
             0% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.2);
             }
+
             100% {
                 transform: scale(1);
             }
@@ -41,9 +43,11 @@
             0% {
                 background-position: 0% 50%;
             }
+
             50% {
                 background-position: 100% 50%;
             }
+
             100% {
                 background-position: 0% 50%;
             }
@@ -62,6 +66,36 @@
             color: black;
             background-color: white;
             border: 2px solid #ccc;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none; /* Sembunyikan modal secara default */
+            position: fixed;
+            inset: 0; /* Mengisi layar penuh */
+            background-color: rgba(0, 0, 0, 0.7); /* Latar belakang semi-transparan */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Pastikan modal berada di atas elemen lainnya */
+        }
+
+        .modal-content {
+            background-color: #2d3748; /* Warna latar belakang modal */
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%; /* Mengisi lebar penuh */
+            max-width: 400px; /* Batasi lebar modal */
+            overflow: hidden; /* Pastikan tidak ada scroll dari konten modal */
+        }
+
+        /* Mencegah scrolling saat modal terbuka */
+        body.modal-open {
+            overflow: hidden; /* Mencegah scrolling pada latar belakang */
+        }
+
+        /* Styling untuk dropdown Custom Bug */
+        select {
+            color: black; /* Set warna teks untuk dropdown */
         }
     </style>
 </head>
@@ -91,6 +125,7 @@
         </div>
 
         <div id="proxy-list" class="space-y-4"></div>
+
         <div class="flex justify-center mt-5">
             <button id="prev-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l" style="display: none;" onclick="prevPage()">
                 Prev
@@ -99,6 +134,70 @@
             <button id="next-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r" style="display: none;" onclick="nextPage()">
                 Next
             </button>
+        </div>
+    </div>
+
+    <!-- Modal untuk membuat akun -->
+    <div id="create-account-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl">Create Account</h2>
+            <p id="proxy-status" class="my-4">Status: <span id="status-indicator"></span></p>
+            <p class="my-4">Choose Account Type:</p>
+            <button id="vmess-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">VMess</button>
+            <button id="vless-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">VLESS</button>
+            <button id="trojan-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Trojan</button>
+            <button id="shadowsocks-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Shadowsocks</button>
+
+            <div id="account-form" class="mt-4 hidden">
+                <label for="account-name" class="block">Account Name:</label>
+                <input type="text" id="account-name" class="border p-2 rounded mb-2 w-full" placeholder="ID - Amazon [VMess-TLS]" disabled>
+
+                <div id="uuid-container">
+                    <label for="uuid" class="block">UUID:</label>
+                    <div class="flex items-center mb-2">
+                        <input type="text" id="uuid" class="border p-2 rounded w-full" value="aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1" placeholder="Enter UUID" readonly>
+                        <button onclick="generateUUID()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-2">Generate</button>
+                    </div>
+                </div>
+
+                <div id="password-container" class="hidden">
+                    <label for="password" class="block">Password:</label>
+                    <div class="flex items-center mb-2">
+                        <input type="text" id="password" class="border p-2 rounded w-full" value="aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1" placeholder="Enter Password" readonly>
+                        <button onclick="generatePassword()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-2">Generate</button>
+                    </div>
+                </div>
+
+                <label for="path" class="block">Path:</label>
+                <input type="text" id="path" class="border p-2 rounded mb-2 w-full" value="" placeholder="Enter Path" disabled>
+
+                <label for="server-domain" class="block">Server Domain:</label>
+                <select id="server-domain" class="border p-2 rounded mb-2 w-full">
+                    <option value="clubgratis.xyz">clubgratis.xyz</option>
+                    <option value="otherdomain.com">otherdomain.com</option>
+                    <option value="example.com">example.com</option>
+                    <option value="example.net">example.net</option>
+                </select>
+
+                <label for="custom-bug" class="block">Custom Bug:</label>
+                <select id="custom-bug" class="border p-2 rounded mb-2 w-full">
+                    <option value="">Select a custom bug</option>
+                    <option value="bug.ava.net">bug.ava.net</option>
+                    <option value="bug.game.net">bug.game.net</option>
+                    <option value="bug.oke.com">bug.oke.com</option>
+                    <option value="bug.oke.net">bug.oke.net</option>
+                </select>
+
+                <label for="tls-option" class="block">Select TLS Option:</label>
+                <select id="tls-option" class="border p-2 rounded mb-2 w-full">
+                    <option value="tls">TLS (port 443)</option>
+                    <option value="non-tls">Non-TLS (port 80)</option>
+                </select>
+
+                <button id="create-account-button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Create Account</button>
+            </div>
+
+            <button class="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" onclick="closeModal()">Close</button>
         </div>
     </div>
 
@@ -123,6 +222,9 @@
         const cache = {};
         let currentPage = 1;
         const itemsPerPage = 10;
+        let currentIP = '';
+        let currentPort = '';
+        let selectedAccountType = '';
 
         async function fetchProxies() {
             const response = await fetch('https://raw.githubusercontent.com/clubgratis/Proxy/refs/heads/main/all.txt');
@@ -174,7 +276,7 @@
                         Country: ${proxy.country} <br />
                         IP: ${proxy.ip}:${proxy.port}
                     </div>
-                    <button onclick="createConnection('${proxy.ip}', '${proxy.port}')" class="mt-2 bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
+                    <button onclick="openCreateAccountModal('${proxy.ip}', '${proxy.port}', '${proxy.country}', '${proxy.isp}')" class="mt-2 bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
                         Create
                     </button>
                 `;
@@ -193,6 +295,92 @@
                     });
                 }
             }
+        }
+
+        function openCreateAccountModal(ip, port, country, isp) {
+            const modal = document.getElementById('create-account-modal');
+            modal.style.display = 'flex';
+            document.body.classList.add('modal-open'); // Menambahkan kelas untuk mencegah scrolling
+            currentIP = ip;
+            currentPort = port;
+
+            // Memeriksa status proxy dan menampilkan di modal
+            checkProxy(currentIP, currentPort).then(isActive => {
+                document.getElementById('status-indicator').textContent = isActive ? 'Active' : 'Inactive';
+                document.getElementById('status-indicator').className = isActive ? 'text-green-500' : 'text-red-500';
+            });
+
+            // Mengatur pengendali klik untuk tombol
+            const accountButtons = ['vmess-button', 'vless-button', 'trojan-button', 'shadowsocks-button'];
+            accountButtons.forEach(buttonId => {
+                document.getElementById(buttonId).onclick = function () {
+                    selectedAccountType = buttonId.replace('-button', '').toUpperCase(); // Menyimpan pilihan akun
+                    showAccountForm(selectedAccountType, country, isp);
+                    disableAccountButtons(accountButtons);
+                };
+            });
+        }
+
+        function disableAccountButtons(buttons) {
+            buttons.forEach(buttonId => {
+                document.getElementById(buttonId).disabled = true; // Menonaktifkan semua tombol
+                document.getElementById(buttonId).classList.add('opacity-50', 'cursor-not-allowed'); // Menambahkan gaya untuk menunjukkan menonaktifkan
+            });
+        }
+
+        function showAccountForm(accountType, country, isp) {
+            document.getElementById('account-form').classList.remove('hidden');
+
+            // Menetapkan nama akun
+            document.getElementById('account-name').value = `${accountType} [ ${country} ${isp} ]`;
+
+            // Mengisi UUID atau Password default
+            if (accountType === 'VMESS' || accountType === 'VLESS') {
+                document.getElementById('uuid').value = "aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1";
+                document.getElementById('uuid-container').classList.remove('hidden');
+                document.getElementById('password-container').classList.add('hidden');
+            } else {
+                document.getElementById('password').value = "aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1";
+                document.getElementById('password-container').classList.remove('hidden');
+                document.getElementById('uuid-container').classList.add('hidden');
+            }
+
+            // Mengisi Path
+            document.getElementById('path').value = `/Club-Gratis/${currentIP}-${currentPort}`;
+
+            // Set akun yang dipilih
+            document.getElementById('create-account-button').onclick = function () {
+                let accountInfo = `Creating ${selectedAccountType} account for IP: ${currentIP}, Port: ${currentPort}`;
+                accountInfo += document.getElementById('password-container').classList.contains('hidden') ? ` with UUID: ${document.getElementById('uuid').value}` : ` with Password: ${document.getElementById('password').value}`;
+                alert(accountInfo);
+                closeModal();
+            };
+        }
+
+        function generatePassword() {
+            const password = generateRandomPassword(); // Menghasilkan password acak 
+            document.getElementById('password').value = password; // Menetapkan password ke input
+        }
+
+        function generateRandomPassword(length = 36) {
+            const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('create-account-modal');
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open'); // Menghapus kelas untuk memfasilitasi scrolling kembali
+            document.getElementById('account-form').classList.add('hidden'); // Sembunyikan form saat modal ditutup
+            const accountButtons = ['vmess-button', 'vless-button', 'trojan-button', 'shadowsocks-button'];
+            accountButtons.forEach(buttonId => {
+                document.getElementById(buttonId).disabled = false; // Mengaktifkan kembali semua tombol saat ditutup
+                document.getElementById(buttonId).classList.remove('opacity-50', 'cursor-not-allowed'); // Menghapus gaya menonaktifkan
+            });
         }
 
         function updateNavigationButtons() {
@@ -282,12 +470,19 @@
             fetchProxies();
         }
 
-        function createConnection(ip, port) {
-            alert(`Creating connection for IP: ${ip}, Port: ${port}`);
+        function generateUUID() {
+            // Simulasi pembuatan UUID baru, Anda dapat mengganti ini dengan metode UUID asli
+            const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const rand = Math.random() * 16 | 0;
+                const v = c === 'x' ? rand : (rand & 0x3 | 0x8);
+                return v.toString(16);
+            });
+            document.getElementById('uuid').value = uuid;
         }
 
         // Fetch proxies saat halaman dimuat
         fetchProxies();
     </script>
 </body>
+
 </html>
