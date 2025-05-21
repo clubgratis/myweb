@@ -176,18 +176,18 @@
                 <select id="server-domain" class="border p-2 rounded mb-2 w-full">
                     <option value="" disabled selected>Select a domain</option>
                     <option value="clubgratis.xyz">clubgratis.xyz</option>
-                    <option value="otherdomain.com">otherdomain.com</option>
-                    <option value="example.com">example.com</option>
-                    <option value="example.net">example.net</option>
+                    <option value="otherdomain.com">vpn.4reavless.xyz</option>
+                    <option value="example.com">akungratis.dpdns.org</option>
+                    <option value="example.net">mrkings.xyz</option>
                 </select>
 
                 <label for="custom-bug" class="block">Custom Bug:</label>
                 <select id="custom-bug" class="border p-2 rounded mb-2 w-full">
                     <option value="">Select a custom bug</option>
-                    <option value="bug.ava.net">bug.ava.net</option>
-                    <option value="bug.game.net">bug.game.net</option>
-                    <option value="bug.oke.com">bug.oke.com</option>
-                    <option value="bug.oke.net">bug.oke.net</option>
+                    <option value="bug.ava.net">ava.game.naver.com</option>
+                    <option value="bug.game.net">graph.instagram.com</option>
+                    <option value="bug.oke.com">graph.facebook.com</option>
+                    <option value="bug.oke.net">zaintest.vuclip.com</option>
                 </select>
 
                 <label for="tls-option" class="block">Select TLS Option:</label>
@@ -196,9 +196,8 @@
                     <option value="non-tls">Non-TLS (port 80)</option>
                 </select>
 
-                <button id="create-account-button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mb-2 rounded">Create Account</button>
+                <button id="create-account-button" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mb-2 rounded">Create Account</button>
             </div>
-
         </div>
     </div>
 
@@ -225,6 +224,8 @@
         const itemsPerPage = 10;
         let currentIP = '';
         let currentPort = '';
+        let currentCountry = ''; // Menyimpan country
+        let currentISP = ''; // Menyimpan ISP
         let selectedAccountType = '';
 
         async function fetchProxies() {
@@ -304,6 +305,8 @@
             document.body.classList.add('modal-open'); // Menambahkan kelas untuk mencegah scrolling
             currentIP = ip;
             currentPort = port;
+            currentCountry = country; // Simpan country
+            currentISP = isp; // Simpan ISP
 
             // Memeriksa status proxy dan menampilkan di modal
             checkProxy(currentIP, currentPort).then(isActive => {
@@ -329,22 +332,26 @@
             });
 
             const accountType = selectedButtonId.replace('-button', '').toUpperCase();
-            showAccountForm(accountType);
+            showAccountForm(accountType, currentCountry, currentISP); // Mengoper country dan isp
         }
 
-        function showAccountForm(accountType) {
+        function showAccountForm(accountType, country, isp) {
             document.getElementById('account-form').classList.remove('hidden');
 
-            // Menetapkan nama akun
-            document.getElementById('account-name').value = `${accountType} Account`;
+            // Menetapkan nama akun dengan format yang diinginkan
+            document.getElementById('account-name').value = `${accountType} [ ${country} ${isp} ]`;
 
             // Mengisi UUID atau Password default
             if (accountType === 'VMESS' || accountType === 'VLESS') {
                 document.getElementById('uuid').value = "aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1";
                 document.getElementById('uuid-container').classList.remove('hidden');
                 document.getElementById('password-container').classList.add('hidden');
-            } else {
-                document.getElementById('password').value = "aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1";
+            } else if (accountType === 'TROJAN') {
+                document.getElementById('password').value = "aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1"; // Default password
+                document.getElementById('password-container').classList.remove('hidden');
+                document.getElementById('uuid-container').classList.add('hidden');
+            } else if (accountType === 'SHADOWSOCKS') {
+                document.getElementById('password').value = "aaaaaaa1-bbbb-4ccc-addd-eeeeeeeeeee1"; // Default method tetap non untuk Shadowsocks
                 document.getElementById('password-container').classList.remove('hidden');
                 document.getElementById('uuid-container').classList.add('hidden');
             }
@@ -354,11 +361,173 @@
 
             // Set akun yang dipilih
             document.getElementById('create-account-button').onclick = function () {
-                let accountInfo = `Creating ${accountType} account for IP: ${currentIP}, Port: ${currentPort}`;
-                accountInfo += document.getElementById('password-container').classList.contains('hidden') ? ` with UUID: ${document.getElementById('uuid').value}` : ` with Password: ${document.getElementById('password').value}`;
-                alert(accountInfo);
+                if (accountType === 'VLESS') {
+                    createVlessConfig(accountType);  // Panggil fungsi untuk konfigurasi VLESS
+                } else if (accountType === 'TROJAN') {
+                    createTrojanConfig(accountType); // Panggil fungsi untuk konfigurasi Trojan
+                } else if (accountType === 'SHADOWSOCKS') {
+                    createShadowsocksConfig(accountType); // Panggil fungsi untuk konfigurasi Shadowsocks
+                } else {
+                    createVmessConfig(accountType);  // Panggil fungsi untuk konfigurasi VMess
+                }
                 closeModal();
             };
+        }
+
+        function createVmessConfig(accountType) {
+            const remarks = document.getElementById('account-name').value; // Nama Akun
+            const uuid = document.getElementById('uuid').value; // UUID
+            const path = document.getElementById('path').value; // Path
+            const bug = document.getElementById('custom-bug').value; // Custom Bug
+            const domain = document.getElementById('server-domain').value; // Server Domain
+            const tlsOption = document.getElementById('tls-option').value; // TLS Option
+
+            // Menyusun host
+            const host = `${bug}.${domain}`;
+
+            let linkConfig;
+
+            // Mengonfigurasi objek berdasarkan TLS atau Non-TLS
+            if (tlsOption === "tls") {
+                // TLS
+                linkConfig = {
+                    v: "2",
+                    ps: remarks,
+                    add: bug,
+                    port: "443",
+                    id: uuid,
+                    aid: "0",
+                    net: "ws",
+                    type: "none",
+                    host: host,
+                    path: path,
+                    tls: "tls",
+                    scy: "zero"
+                };
+            } else {
+                // Non-TLS
+                linkConfig = {
+                    v: "2",
+                    ps: remarks,
+                    add: bug,
+                    port: "80",
+                    id: uuid,
+                    aid: "0",
+                    net: "ws",
+                    type: "none",
+                    host: host,
+                    path: path,
+                    tls: "",
+                    scy: "zero"
+                };
+            }
+
+            // Mengonversi objek linkConfig menjadi format JSON string
+            const jsonLinkConfig = JSON.stringify(linkConfig);
+
+            // Mengonversi menjadi string vmess
+            const vmessLink = `vmess://${btoa(jsonLinkConfig)}`; // Menggunakan base64 encoding
+
+            // Output objek
+            console.log('VMess Config:', vmessLink);
+
+            // Menyalin konfigurasi ke clipboard
+            copyToClipboard(vmessLink); // Memanggil fungsi untuk menyalin
+        }
+
+        function createVlessConfig(accountType) {
+            const remarks = document.getElementById('account-name').value; // Nama Akun
+            const uuid = document.getElementById('uuid').value; // UUID
+            const path = document.getElementById('path').value; // Path
+            const bug = document.getElementById('custom-bug').value; // Custom Bug
+            const domain = document.getElementById('server-domain').value; // Server Domain
+            const tlsOption = document.getElementById('tls-option').value; // TLS Option
+
+            // Menyusun host
+            const host = `${bug}.${domain}`;
+
+            let vlessLink;
+
+            // Mengonfigurasi objek berdasarkan TLS atau Non-TLS
+            if (tlsOption === "tls") {
+                // VLESS TLS
+                vlessLink = `vless://${uuid}@${bug}:443?encryption=none&security=tls&type=ws&host=${host}&path=${path}#${encodeURIComponent(remarks)}`;
+            } else {
+                // VLESS Non-TLS
+                vlessLink = `vless://${uuid}@${bug}:80?encryption=none&security=none&type=ws&host=${host}&path=${path}#${encodeURIComponent(remarks)}`;
+            }
+
+            // Output objek
+            console.log('VLESS Config:', vlessLink);
+
+            // Menyalin konfigurasi ke clipboard
+            copyToClipboard(vlessLink); // Memanggil fungsi untuk menyalin
+        }
+
+        function createTrojanConfig(accountType) {
+            const remarks = document.getElementById('account-name').value; // Nama Akun
+            const password = document.getElementById('password').value; // Password
+            const bug = document.getElementById('custom-bug').value; // Custom Bug
+            const domain = document.getElementById('server-domain').value; // Server Domain
+            const path = document.getElementById('path').value; // Path
+            const tlsOption = document.getElementById('tls-option').value; // TLS Option
+
+            // Menyusun host
+            const host = `${bug}.${domain}`;
+
+            let trojanLink;
+
+            // Mengonfigurasi objek berdasarkan TLS atau Non-TLS
+            if (tlsOption === "tls") {
+                // Trojan TLS
+                trojanLink = `trojan://${password}@${bug}:443?security=tls&host=${host}&type=ws&sni=${host}&path=${path}#${encodeURIComponent(remarks)}`;
+            } else {
+                // Trojan Non-TLS
+                trojanLink = `trojan://${password}@${bug}:80?security=none&type=ws&host=${host}&path=${path}#${encodeURIComponent(remarks)}`;
+            }
+
+            // Output objek
+            console.log('Trojan Config:', trojanLink);
+
+            // Menyalin konfigurasi ke clipboard
+            copyToClipboard(trojanLink); // Memanggil fungsi untuk menyalin
+        }
+
+      function createShadowsocksConfig(accountType) {
+    const remarks = document.getElementById('account-name').value; // Nama Akun
+    const uuid = document.getElementById('uuid').value; // UUID
+    const path = document.getElementById('path').value; // Path
+    const bug = document.getElementById('custom-bug').value; // Custom Bug
+    const domain = document.getElementById('server-domain').value; // Server Domain
+    const tlsOption = document.getElementById('tls-option').value; // TLS Option
+
+    // Menyusun host
+    const host = `${bug}.${domain}`;
+    const method = 'none'; // Method ditetapkan sebagai none
+
+    let shadowsocksLink;
+
+    // Mengonfigurasi objek berdasarkan TLS atau Non-TLS
+    if (tlsOption === "tls") {
+        // Shadowsocks TLS
+        shadowsocksLink = `ss://${btoa(`${method}:${uuid}`)}@${bug}:443?path=${path}&security=tls&host=${host}&type=ws&sni=${host}#${encodeURIComponent(remarks)}`;
+    } else {
+        // Shadowsocks Non-TLS
+        shadowsocksLink = `ss://${btoa(`${method}:${uuid}`)}@${bug}:80?path=${path}&security=none&type=ws&host=${host}#${encodeURIComponent(remarks)}`;
+    }
+
+    // Output objek
+    console.log('Shadowsocks Config:', shadowsocksLink);
+
+    // Menyalin konfigurasi ke clipboard
+    copyToClipboard(shadowsocksLink); // Memanggil fungsi untuk menyalin
+}
+
+        // Fungsi untuk menyalin ke clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Configuration copied to clipboard!');
+            });
         }
 
         function generatePassword() {
