@@ -74,5 +74,5 @@ Proyek ini dikelola oleh komunitas Club Gratis. Jika kamu ingin menambahkan fitu
 
 ## 🧡 Donasi
 
-Dukung kami agar layanan tetap gratis untuk semua. Info donasi ada di halaman **Donate** di menu sidebar.
+Dukung kami agar layanan tetap gratis untuk semua. Info donasi ada di halaman **https://raw.githubusercontent.com/clubgratis/myweb/main/web/TerimaKasih-Atas-Donasinya.jpeg** di menu sidebar.
 
